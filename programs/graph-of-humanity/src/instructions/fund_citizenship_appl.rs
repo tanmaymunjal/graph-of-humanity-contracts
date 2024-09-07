@@ -62,8 +62,7 @@ pub fn handler(ctx: Context<FundCitizenshipAppl>) -> Result<()> {
     let treasury = &ctx.accounts.treasury;
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
 
-    let fee = (citizenship_appl.appeal_number as u64 + 1) * CITIZENSHIP_FEE;
-
+    let fee = 2u64.pow(citizenship_appl.appeal_number as u32) * CITIZENSHIP_FEE;
     transfer(
         CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
