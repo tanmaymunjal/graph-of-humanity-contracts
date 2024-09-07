@@ -21,6 +21,10 @@ pub mod graph_of_humanity {
     pub fn edit_bio(ctx: Context<EditBio>, new_bio: String) -> Result<()> {
         edit_bio::handler(ctx, new_bio)
     }
+
+    pub fn edit_username(ctx: Context<EditUsername>, new_username: String) -> Result<()> {
+        edit_username::handler(ctx,new_username)
+    }
 }
 
 #[derive(Accounts)]
