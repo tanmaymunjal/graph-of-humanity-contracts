@@ -10,13 +10,13 @@ pub struct MemberRegistered {
 #[event]
 pub struct UsernameEdited {
     pub member: Pubkey,
-    pub new_username: String
+    pub new_username: String,
 }
 
 #[event]
 pub struct BioEdited {
     pub member: Pubkey,
-    pub new_bio: String
+    pub new_bio: String,
 }
 
 #[event]
@@ -25,15 +25,15 @@ pub struct CitizenshipApplied {
     pub voucher_member: Pubkey,
     pub video_link: String,
     pub other_verifying_links: Option<String>,
-    pub appeal_number: u8
+    pub appeal_number: u8,
 }
 
 #[event]
 pub struct CitizenshipFeePaid {
-    pub citizenship_appl: Pubkey
+    pub citizenship_appl: Pubkey,
 }
 
 #[event]
 pub struct CitizenshipVoucherFeeApplied {
-    pub citizenship_appl: Pubkey
+    pub citizenship_appl: Pubkey,
 }

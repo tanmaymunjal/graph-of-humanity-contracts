@@ -10,7 +10,7 @@ pub struct Member {
     #[max_len(500)]
     pub bio: String,
     pub citizen: bool,
-    pub num_of_appeals: u8
+    pub num_of_appeals: u8,
 }
 
 #[account]
@@ -25,7 +25,7 @@ pub struct CitizenshipApplication {
     pub other_verifying_links: Option<String>,
     pub fee_paid: bool,
     pub voucher_fee_paid: bool,
-    pub appeal_number: u8
+    pub appeal_number: u8,
 }
 
 #[account]
@@ -35,7 +35,7 @@ pub struct CommitteeVoters {
     pub voter: Pubkey,
     pub committee: Pubkey,
     pub voted: bool,
-    pub claimed: bool
+    pub claimed: bool,
 }
 
 #[account]
@@ -49,5 +49,5 @@ pub struct CitizenshipCommittee {
     pub accept_votes: u8,
     pub reject_votes: u8,
     #[max_len(100)]
-    pub rejection_reason: Option<String>
+    pub rejection_reason: Option<String>,
 }

@@ -1,8 +1,8 @@
-use anchor_lang::prelude::*;
-use crate::state::Member;
 use crate::event::MemberRegistered;
+use crate::state::Member;
+use anchor_lang::prelude::*;
 #[derive(Accounts)]
-pub struct  BecomeMember<'info> {
+pub struct BecomeMember<'info> {
     #[account(mut)]
     pub member_creator: Signer<'info>,
     #[account(
@@ -19,11 +19,7 @@ pub struct  BecomeMember<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(
-    ctx: Context<BecomeMember>,
-    username: String,
-    bio: String
-) -> Result<()>{
+pub fn handler(ctx: Context<BecomeMember>, username: String, bio: String) -> Result<()> {
     let member = &mut ctx.accounts.member;
     let member_creator = &ctx.accounts.member_creator;
 
@@ -33,7 +29,7 @@ pub fn handler(
     member.citizen = false;
     member.num_of_appeals = 0;
 
-    emit!(MemberRegistered{
+    emit!(MemberRegistered {
         member_creator: member_creator.key(),
         username: username,
         bio: bio
