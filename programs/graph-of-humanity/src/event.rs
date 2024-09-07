@@ -37,3 +37,8 @@ pub struct CitizenshipFeePaid {
 pub struct CitizenshipVoucherFeeApplied {
     pub citizenship_appl: Pubkey,
 }
+
+#[event]
+pub struct ContractInitialized {
+    pub message: String,
+}

@@ -1,6 +1,6 @@
-use crate::event::CitizenshipApplied;
-use crate::state::{Member, CitizenshipApplication};
 use crate::error::GraphOfHumanityErrors;
+use crate::event::CitizenshipApplied;
+use crate::state::{CitizenshipApplication, Member};
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
@@ -33,7 +33,11 @@ pub struct ApplyCitizenship<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<ApplyCitizenship>, video_link: String, other_verifying_links: Option<String>) -> Result<()> {
+pub fn handler(
+    ctx: Context<ApplyCitizenship>,
+    video_link: String,
+    other_verifying_links: Option<String>,
+) -> Result<()> {
     let member = &mut ctx.accounts.member;
     let member_voucher = &ctx.accounts.member_voucher;
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
@@ -59,7 +63,7 @@ pub fn handler(ctx: Context<ApplyCitizenship>, video_link: String, other_verifyi
         voucher_member: member_voucher.key(),
         video_link: video_link,
         other_verifying_links: other_verifying_links,
-        appeal_number: member.num_of_appeals-1
+        appeal_number: member.num_of_appeals - 1
     });
 
     Ok(())
