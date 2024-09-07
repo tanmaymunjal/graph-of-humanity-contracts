@@ -1,15 +1,23 @@
 use anchor_lang::prelude::*;
+pub mod state;
+pub mod instructions;
+pub mod event;
 
+use instructions::*;
 declare_id!("GigY2BgaW1iJn5JQS2JbBCDkVbPeLErNpJqpwoQY63YD");
 
 #[program]
 pub mod graph_of_humanity {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
-        Ok(())
+    pub fn register_member(
+        ctx: Context<BecomeMember>,
+        username: String,
+        bio: String
+    ) -> Result<()> {
+        become_member::handler(ctx, username, bio)
     }
+
 }
 
 #[derive(Accounts)]
