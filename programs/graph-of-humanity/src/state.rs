@@ -11,6 +11,7 @@ pub struct Member {
     pub bio: String,
     pub citizen: bool,
     pub num_of_appeals: u8,
+    pub appeal_pending: bool
 }
 
 #[account]

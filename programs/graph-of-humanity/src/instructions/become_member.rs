@@ -23,11 +23,13 @@ pub fn handler(ctx: Context<BecomeMember>, username: String, bio: String) -> Res
     let member = &mut ctx.accounts.member;
     let member_creator = &ctx.accounts.member_creator;
 
+    member.bump = ctx.bumps.member;
     member.member_creator.key();
     member.username = username.clone();
     member.bio = bio.clone();
     member.citizen = false;
     member.num_of_appeals = 0;
+    member.appeal_pending = false;
 
     emit!(MemberRegistered {
         member_creator: member_creator.key(),

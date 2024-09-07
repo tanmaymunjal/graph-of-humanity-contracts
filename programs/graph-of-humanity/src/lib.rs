@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 pub mod event;
 pub mod instructions;
 pub mod state;
+pub mod error;
 
 use instructions::*;
 declare_id!("GigY2BgaW1iJn5JQS2JbBCDkVbPeLErNpJqpwoQY63YD");
@@ -24,6 +25,10 @@ pub mod graph_of_humanity {
 
     pub fn edit_username(ctx: Context<EditUsername>, new_username: String) -> Result<()> {
         edit_username::handler(ctx,new_username)
+    }
+
+    pub fn apply_citizenship(ctx: Context<ApplyCitizenship>, video_link: String, other_verifying_links: Option<String>) -> Result<()>{
+        apply_citizenship::handler(ctx, video_link, other_verifying_links)
     }
 }
 
