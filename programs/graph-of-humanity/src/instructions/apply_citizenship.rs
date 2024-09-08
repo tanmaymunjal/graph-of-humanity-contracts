@@ -15,7 +15,8 @@ pub struct ApplyCitizenship<'info> {
             member_creator.key().as_ref(),
             b"member"
         ],
-        bump=member.bump
+        bump=member.bump,
+        constraint = member.appeal_pending == false @GraphOfHumanityErrors::CitizenshipApplicationPending
     )]
     pub member: Account<'info, Member>,
     #[account(
@@ -41,11 +42,6 @@ pub fn handler(
     let member = &mut ctx.accounts.member;
     let member_voucher = &ctx.accounts.member_voucher;
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
-
-    require!(
-        member.appeal_pending == false,
-        GraphOfHumanityErrors::CitizenshipApplicationPending
-    );
 
     citizenship_appl.bump = ctx.bumps.citizenship_appl;
     citizenship_appl.member = member.key();

@@ -39,6 +39,10 @@ pub mod graph_of_humanity {
     ) -> Result<()> {
         apply_citizenship::handler(ctx, video_link, other_verifying_links)
     }
+
+    pub fn fund_voucher(ctx: Context<FundVoucher>) -> Result<()> {
+        fund_voucher::handler(ctx)
+    }
 }
 
 #[derive(Accounts)]
