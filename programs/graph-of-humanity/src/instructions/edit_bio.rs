@@ -17,14 +17,14 @@ pub struct EditBio<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<EditBio>, new_bio: String) -> Result<()> {
+pub fn handler(ctx: Context<EditBio>, new_bio_link: String) -> Result<()> {
     let member = &mut ctx.accounts.member;
 
-    member.bio = new_bio.clone();
+    member.bio_link = new_bio_link.clone();
 
     emit!(BioEdited {
         member: member.key(),
-        new_bio: new_bio,
+        new_bio_link: new_bio_link,
     });
 
     Ok(())

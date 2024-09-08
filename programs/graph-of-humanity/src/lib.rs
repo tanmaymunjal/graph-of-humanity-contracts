@@ -18,18 +18,14 @@ pub mod graph_of_humanity {
 
     pub fn register_member(
         ctx: Context<BecomeMember>,
-        username: String,
-        bio: String,
+        citizen_name: String,
+        bio_link: String,
     ) -> Result<()> {
-        become_member::handler(ctx, username, bio)
+        become_member::handler(ctx, citizen_name, bio_link)
     }
 
-    pub fn edit_bio(ctx: Context<EditBio>, new_bio: String) -> Result<()> {
-        edit_bio::handler(ctx, new_bio)
-    }
-
-    pub fn edit_username(ctx: Context<EditUsername>, new_username: String) -> Result<()> {
-        edit_username::handler(ctx, new_username)
+    pub fn edit_bio(ctx: Context<EditBio>, new_bio_link: String) -> Result<()> {
+        edit_bio::handler(ctx, new_bio_link)
     }
 
     pub fn apply_citizenship(

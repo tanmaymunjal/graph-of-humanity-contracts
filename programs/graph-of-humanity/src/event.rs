@@ -3,8 +3,8 @@ use anchor_lang::prelude::*;
 #[event]
 pub struct MemberRegistered {
     pub member_creator: Pubkey,
-    pub username: String,
-    pub bio: String,
+    pub citizen_name: String,
+    pub bio_link: String,
 }
 
 #[event]
@@ -16,7 +16,7 @@ pub struct UsernameEdited {
 #[event]
 pub struct BioEdited {
     pub member: Pubkey,
-    pub new_bio: String,
+    pub new_bio_link: String,
 }
 
 #[event]

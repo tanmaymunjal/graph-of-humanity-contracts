@@ -5,10 +5,10 @@ use anchor_lang::prelude::*;
 pub struct Member {
     pub bump: u8,
     pub member_creator: Pubkey,
-    #[max_len(50)]
-    pub username: String,
-    #[max_len(500)]
-    pub bio: String,
+    #[max_len(40)]
+    pub citizen_name: String,
+    #[max_len(100)]
+    pub bio_link: String,
     pub citizen: bool,
     pub num_of_appeals: u8,
     pub appeal_pending: bool,
