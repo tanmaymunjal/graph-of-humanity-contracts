@@ -20,6 +20,15 @@ pub struct ApplyCitizenship<'info> {
     )]
     pub member: Account<'info, Member>,
     #[account(
+        seeds = [
+            member_voucher.key().as_ref(),
+            b"member"
+        ],
+        constraint = member_voucher_account.citizen == true @GraphOfHumanityErrors::NonMemberCantVouch,
+        bump=member_voucher_account.bump
+    )]
+    pub member_voucher_account: Account<'info, Member>,
+    #[account(
         init,
         payer=member_creator,
         space=8+CitizenshipApplication::INIT_SPACE,
