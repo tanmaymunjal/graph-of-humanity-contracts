@@ -68,5 +68,9 @@ pub enum GraphOfHumanityErrors {
 
     // 6015
     #[msg("Voting still ongoing")]
-    VotingStillOngoing
+    VotingStillOngoing,
+
+    // 6016
+    #[msg("You have already claimed your money")]
+    AlreadyClaimedVoterMoney,
 }

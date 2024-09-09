@@ -59,10 +59,15 @@ pub fn handler(
     citizenship_appl.video_link = video_link.clone();
     citizenship_appl.other_verifying_links = other_verifying_links.clone();
     citizenship_appl.fee_paid = false;
-    citizenship_appl.voucher_fee_paid = false;
     citizenship_appl.appeal_number = member.num_of_appeals;
+    if citizenship_appl.appeal_number == 0 {
+        citizenship_appl.voucher_fee_paid = false;
+    } else {
+        citizenship_appl.voucher_fee_paid = true;
+    };
     citizenship_appl.judges = vec![];
-    citizenship_appl.votes = 0;
+    citizenship_appl.accept_vote = 0;
+    citizenship_appl.reject_votes = 0;
     citizenship_appl.randomness_account = None;
     citizenship_appl.voting_started = None;
     citizenship_appl.citizen_index = None;

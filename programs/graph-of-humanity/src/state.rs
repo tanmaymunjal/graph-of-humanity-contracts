@@ -36,7 +36,8 @@ pub struct CitizenshipApplication {
     pub appeal_number: u8,
     #[max_len(5)]
     pub judges: Vec<u64>,
-    pub votes: u8,
+    pub accept_vote: u8,
+    pub reject_votes: u8,
     pub randomness_account: Option<Pubkey>,
     pub voting_started: Option<i64>,
     pub citizen_index: Option<u64>,

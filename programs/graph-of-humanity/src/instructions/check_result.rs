@@ -1,7 +1,7 @@
+use crate::constants::DAY;
 use crate::error::GraphOfHumanityErrors;
 use crate::event::CitizenshipResultDeclared;
 use crate::state::{CitizenshipApplication, Member, Treasury};
-use crate::constants::DAY;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
@@ -32,26 +32,23 @@ pub struct CheckVoteResult<'info> {
     pub system_program: Program<'info, System>,
 }
 
-
 pub fn handler(ctx: Context<CheckVoteResult>) -> Result<()> {
     let citizenship_appl = &mut ctx.accounts.member_citizenship_appl;
     let member = &mut ctx.accounts.member;
     let treasury = &mut ctx.accounts.treasury;
 
     // Check if the number of votes is over half
-    let total_judges = citizenship_appl.judges.len() as u8;
-    let votes_required = total_judges / 2 + 1;
     let mut accepted = false;
-    if citizenship_appl.votes >= votes_required {
+    if citizenship_appl.accept_vote > citizenship_appl.reject_votes {
         member.citizen = true;
         citizenship_appl.citizen_index = Some(treasury.num_of_citizens);
         treasury.num_of_citizens += 1;
         accepted = true;
-    }else {
+    } else {
         member.num_of_appeals += 1;
     };
 
-    emit!(CitizenshipResultDeclared{
+    emit!(CitizenshipResultDeclared {
         citizenship_appl: citizenship_appl.key(),
         accepted: accepted
     });

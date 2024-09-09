@@ -56,12 +56,11 @@ pub mod graph_of_humanity {
         vote::handler(ctx, accept, reason)
     }
 
-    pub fn check_result(
-        ctx: Context<CheckVoteResult>
-    ) -> Result<()>{
+    pub fn check_result(ctx: Context<CheckVoteResult>) -> Result<()> {
         check_result::handler(ctx)
     }
-}
 
-#[derive(Accounts)]
-pub struct Initialize {}
+    pub fn claim_reward(ctx: Context<ClaimVoteReward>) -> Result<()> {
+        claim_reward::handler(ctx)
+    }
+}

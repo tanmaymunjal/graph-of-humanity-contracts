@@ -65,5 +65,11 @@ pub struct CommitteeVoted {
 #[event]
 pub struct CitizenshipResultDeclared {
     pub citizenship_appl: Pubkey,
-    pub accepted: bool
+    pub accepted: bool,
+}
+
+#[event]
+pub struct RewardClaimed {
+    pub citizenship_appl: Pubkey,
+    pub voter: Pubkey,
 }

@@ -1,7 +1,7 @@
+use crate::constants::DAY;
 use crate::error::GraphOfHumanityErrors;
 use crate::event::CommitteeVoted;
 use crate::state::{CitizenshipApplication, CommitteeVotes, Member};
-use crate::constants::DAY;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
@@ -61,7 +61,9 @@ pub fn handler(ctx: Context<VoteCitizenship>, accept: bool, reason: Option<Strin
     let member_citizenship_appl = &mut ctx.accounts.member_citizenship_appl;
     let vote_acc = &mut ctx.accounts.vote_acc;
     if accept {
-        member_citizenship_appl.votes += 1;
+        member_citizenship_appl.accept_vote += 1;
+    } else {
+        member_citizenship_appl.reject_votes += 1;
     };
 
     vote_acc.bump = ctx.bumps.vote_acc;
