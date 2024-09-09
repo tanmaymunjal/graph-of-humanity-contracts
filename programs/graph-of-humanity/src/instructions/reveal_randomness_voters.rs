@@ -1,7 +1,7 @@
+use crate::constants::NUM_OF_JUDGES;
 use crate::error::GraphOfHumanityErrors;
 use crate::event::JudgeRandomnessRevealed;
 use crate::state::{CitizenshipApplication, Member, Treasury};
-use crate::constants::NUM_OF_JUDGES;
 use anchor_lang::prelude::*;
 use sha2::{Digest, Sha256};
 use std::collections::HashSet;
@@ -44,16 +44,15 @@ pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
     let treasury = &ctx.accounts.treasury;
 
-    let randomness_data =
-        RandomnessAccountData::parse(randomness_account.data.borrow()).unwrap();
+    let randomness_data = RandomnessAccountData::parse(randomness_account.data.borrow()).unwrap();
     let revealed_random_value = randomness_data.get_value(&clock);
     let citizens = treasury.num_of_citizens;
 
     citizenship_appl.randomness_account = None;
+    let mut judges = citizenship_appl.judges.clone();
     match revealed_random_value {
-        Err(_) => {},
+        Err(_) => {}
         Ok(random_val) => {
-            let mut judges = citizenship_appl.judges.clone();
             if citizens < NUM_OF_JUDGES {
                 judges = (0..citizens).collect();
             } else {
@@ -70,7 +69,7 @@ pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
 
                 let mut unique_judges = HashSet::new();
                 for num in numbers.iter() {
-                    if judges.len() as u64== NUM_OF_JUDGES {
+                    if judges.len() as u64 == NUM_OF_JUDGES {
                         break;
                     }
                     let hashed = sha256_hash(*num, seed);
@@ -85,7 +84,14 @@ pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
         }
     };
 
-    emit!(JudgeRandomnessRevealed{
+    if citizenship_appl.judges.len() as u64 == NUM_OF_JUDGES
+        || citizenship_appl.judges.len() as u64 == citizens
+    {
+        let current_time = Clock::get()?.unix_timestamp;
+        citizenship_appl.voting_started = Some(current_time);
+    };
+
+    emit!(JudgeRandomnessRevealed {
         citizenship_appl: citizenship_appl.key(),
         choosen_judges: citizenship_appl.judges.clone()
     });

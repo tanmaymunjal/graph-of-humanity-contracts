@@ -36,30 +36,18 @@ pub struct CitizenshipApplication {
     pub appeal_number: u8,
     #[max_len(5)]
     pub judges: Vec<u64>,
+    pub votes: u8,
     pub randomness_account: Option<Pubkey>,
-    pub citizen_index: Option<u64>
+    pub voting_started: Option<i64>,
+    pub citizen_index: Option<u64>,
 }
 
 #[account]
 #[derive(InitSpace)]
-pub struct CommitteeVoters {
+pub struct CommitteeVotes {
     pub bump: u8,
     pub voter: Pubkey,
-    pub committee: Pubkey,
-    pub voted: bool,
+    pub citizenship_appl: Pubkey,
+    pub accept: bool,
     pub claimed: bool,
-}
-
-#[account]
-#[derive(InitSpace)]
-pub struct CitizenshipCommittee {
-    pub bump: u8,
-    pub appl: Pubkey,
-    pub instantiated: i64,
-    #[max_len(5)]
-    pub voters: Vec<Pubkey>,
-    pub accept_votes: u8,
-    pub reject_votes: u8,
-    #[max_len(100)]
-    pub rejection_reason: Option<String>,
 }

@@ -62,8 +62,10 @@ pub fn handler(
     citizenship_appl.voucher_fee_paid = false;
     citizenship_appl.appeal_number = member.num_of_appeals;
     citizenship_appl.judges = vec![];
+    citizenship_appl.votes = 0;
     citizenship_appl.randomness_account = None;
-
+    citizenship_appl.voting_started = None;
+    citizenship_appl.citizen_index = None;
     member.num_of_appeals += 1;
 
     emit!(CitizenshipApplied {

@@ -51,5 +51,13 @@ pub struct JudgeRandomnessRequested {
 #[event]
 pub struct JudgeRandomnessRevealed {
     pub citizenship_appl: Pubkey,
-    pub choosen_judges: Vec<u64>
+    pub choosen_judges: Vec<u64>,
+}
+
+#[event]
+pub struct CommitteeVoted {
+    pub citizenship_appl: Pubkey,
+    pub voter: Pubkey,
+    pub accept: bool,
+    pub reason: Option<String>,
 }

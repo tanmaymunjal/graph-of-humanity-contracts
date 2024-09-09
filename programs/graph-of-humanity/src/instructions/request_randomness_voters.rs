@@ -1,7 +1,7 @@
+use crate::constants::NUM_OF_JUDGES;
 use crate::error::GraphOfHumanityErrors;
 use crate::event::JudgeRandomnessRequested;
 use crate::state::{CitizenshipApplication, Member, Treasury};
-use crate::constants::NUM_OF_JUDGES;
 use anchor_lang::prelude::*;
 use switchboard_on_demand::accounts::RandomnessAccountData;
 

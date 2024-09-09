@@ -44,8 +44,16 @@ pub mod graph_of_humanity {
         request_randomness_voters::handler(ctx)
     }
 
-    pub fn reveal_randomness_voters(ctx: Context<RevealRandomnessJudges>) -> Result<()>{
+    pub fn reveal_randomness_voters(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
         reveal_randomness_voters::handler(ctx)
+    }
+
+    pub fn vote_citizen(
+        ctx: Context<VoteCitizenship>,
+        accept: bool,
+        reason: Option<String>,
+    ) -> Result<()> {
+        vote::handler(ctx, accept, reason)
     }
 }
 

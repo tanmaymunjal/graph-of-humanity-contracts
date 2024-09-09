@@ -6,6 +6,7 @@ pub mod fund_voucher;
 pub mod initialize;
 pub mod request_randomness_voters;
 pub mod reveal_randomness_voters;
+pub mod vote;
 
 pub use apply_citizenship::*;
 pub use become_member::*;
@@ -15,3 +16,4 @@ pub use fund_voucher::*;
 pub use initialize::*;
 pub use request_randomness_voters::*;
 pub use reveal_randomness_voters::*;
+pub use vote::*;

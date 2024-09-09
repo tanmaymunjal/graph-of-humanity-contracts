@@ -49,4 +49,12 @@ pub enum GraphOfHumanityErrors {
     // 6010
     #[msg("You are already a citizien, why are you re-applying?")]
     DontReapplyForCitizenWhenAlreadyOne,
+
+    // 6011
+    #[msg("Can not vote as a non-citizen")]
+    CanNotVoteAsANonCitizen,
+
+    // 6012
+    #[msg("Voter not in judges")]
+    VoterNotInJudges,
 }
