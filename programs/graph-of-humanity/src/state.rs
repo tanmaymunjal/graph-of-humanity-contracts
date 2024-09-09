@@ -33,6 +33,8 @@ pub struct CitizenshipApplication {
     pub fee_paid: bool,
     pub voucher_fee_paid: bool,
     pub appeal_number: u8,
+    pub judge_selected: bool,
+    pub randomness_account: Option<Pubkey>,
 }
 
 #[account]

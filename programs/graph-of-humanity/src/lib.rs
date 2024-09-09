@@ -39,6 +39,10 @@ pub mod graph_of_humanity {
     pub fn fund_voucher(ctx: Context<FundVoucher>) -> Result<()> {
         fund_voucher::handler(ctx)
     }
+
+    pub fn request_randomness_voters(ctx:Context<RequestRandomnessJudges>) -> Result<()>{
+        request_randomness_voters::handler(ctx)
+    }
 }
 
 #[derive(Accounts)]

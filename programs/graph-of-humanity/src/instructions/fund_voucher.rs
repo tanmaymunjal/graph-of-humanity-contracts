@@ -28,7 +28,11 @@ pub struct FundVoucher<'info> {
         associated_token::authority = member_voucher
     )]
     pub member_voucher_token_account: Account<'info, TokenAccount>,
-    #[account(mut,constraint=citizenship_appl.voucher_member == member_voucher.key() @GraphOfHumanityErrors::CanNotFullfillSomebodyElseVoucher)]
+    #[account(
+        mut,
+        constraint = citizenship_appl.voucher_member == member_voucher.key() @GraphOfHumanityErrors::CanNotFullfillSomebodyElseVoucher,
+        constraint = citizenship_appl.voucher_fee_paid == false @GraphOfHumanityErrors::CitizenshipVoucherAlreadyFunded
+    )]
     pub citizenship_appl: Account<'info, CitizenshipApplication>,
     #[account(
         seeds = [

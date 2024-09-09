@@ -42,3 +42,8 @@ pub struct CitizenshipVoucherFeeApplied {
 pub struct ContractInitialized {
     pub message: String,
 }
+
+#[event]
+pub struct JudgeRandomnessRequested {
+    pub citizenship_appl: Pubkey,
+}

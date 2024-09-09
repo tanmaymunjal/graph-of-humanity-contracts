@@ -60,6 +60,8 @@ pub fn handler(
     citizenship_appl.fee_paid = false;
     citizenship_appl.voucher_fee_paid = false;
     citizenship_appl.appeal_number = member.num_of_appeals;
+    citizenship_appl.judge_selected = false;
+    citizenship_appl.randomness_account = None;
 
     member.num_of_appeals += 1;
 

@@ -7,6 +7,7 @@ use anchor_spl::{
     mint::USDC,
     token::{transfer, Mint, Token, TokenAccount, Transfer},
 };
+use crate::error::GraphOfHumanityErrors;
 
 #[derive(Accounts)]
 pub struct FundCitizenshipAppl<'info> {
@@ -33,6 +34,7 @@ pub struct FundCitizenshipAppl<'info> {
             &citizenship_appl.appeal_number.to_le_bytes(),
             b"citizenship_appl"
         ],
+        constraint = citizenship_appl.fee_paid == false @GraphOfHumanityErrors::CitizenshipApplAlreadyFunded,
         bump=citizenship_appl.bump
     )]
     pub citizenship_appl: Account<'info, CitizenshipApplication>,
