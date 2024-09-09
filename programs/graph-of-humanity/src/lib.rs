@@ -55,6 +55,12 @@ pub mod graph_of_humanity {
     ) -> Result<()> {
         vote::handler(ctx, accept, reason)
     }
+
+    pub fn check_result(
+        ctx: Context<CheckVoteResult>
+    ) -> Result<()>{
+        check_result::handler(ctx)
+    }
 }
 
 #[derive(Accounts)]

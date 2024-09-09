@@ -7,6 +7,7 @@ pub mod initialize;
 pub mod request_randomness_voters;
 pub mod reveal_randomness_voters;
 pub mod vote;
+pub mod check_result;
 
 pub use apply_citizenship::*;
 pub use become_member::*;
@@ -17,3 +18,4 @@ pub use initialize::*;
 pub use request_randomness_voters::*;
 pub use reveal_randomness_voters::*;
 pub use vote::*;
+pub use check_result::*;

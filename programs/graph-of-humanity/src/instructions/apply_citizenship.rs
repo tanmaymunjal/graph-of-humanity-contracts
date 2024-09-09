@@ -66,7 +66,6 @@ pub fn handler(
     citizenship_appl.randomness_account = None;
     citizenship_appl.voting_started = None;
     citizenship_appl.citizen_index = None;
-    member.num_of_appeals += 1;
 
     emit!(CitizenshipApplied {
         member: member.key(),

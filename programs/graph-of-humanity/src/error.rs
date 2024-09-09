@@ -57,4 +57,16 @@ pub enum GraphOfHumanityErrors {
     // 6012
     #[msg("Voter not in judges")]
     VoterNotInJudges,
+
+    // 6013
+    #[msg("Voting has not started")]
+    VotingNotStarted,
+
+    // 6014
+    #[msg("Voting has already ended")]
+    VotingPeriodEnded,
+
+    // 6015
+    #[msg("Voting still ongoing")]
+    VotingStillOngoing
 }

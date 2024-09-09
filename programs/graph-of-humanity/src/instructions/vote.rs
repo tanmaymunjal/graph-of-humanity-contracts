@@ -1,6 +1,7 @@
 use crate::error::GraphOfHumanityErrors;
 use crate::event::CommitteeVoted;
 use crate::state::{CitizenshipApplication, CommitteeVotes, Member};
+use crate::constants::DAY;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
@@ -35,7 +36,9 @@ pub struct VoteCitizenship<'info> {
             b"citizenship_appl"
         ],
         bump=member_citizenship_appl.bump,
-        constraint = member_citizenship_appl.judges.contains(&voter_citizenship.citizen_index.unwrap()) @ GraphOfHumanityErrors::VoterNotInJudges
+        constraint = member_citizenship_appl.judges.contains(&voter_citizenship.citizen_index.unwrap()) @ GraphOfHumanityErrors::VoterNotInJudges,
+        constraint = member_citizenship_appl.voting_started.is_some() @ GraphOfHumanityErrors::VotingNotStarted,
+        constraint = Clock::get()?.unix_timestamp - member_citizenship_appl.voting_started.unwrap() <= DAY @ GraphOfHumanityErrors::VotingPeriodEnded
     )]
     pub member_citizenship_appl: Account<'info, CitizenshipApplication>,
     #[account(

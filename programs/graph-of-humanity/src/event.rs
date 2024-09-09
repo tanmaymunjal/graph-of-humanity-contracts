@@ -61,3 +61,9 @@ pub struct CommitteeVoted {
     pub accept: bool,
     pub reason: Option<String>,
 }
+
+#[event]
+pub struct CitizenshipResultDeclared {
+    pub citizenship_appl: Pubkey,
+    pub accepted: bool
+}
