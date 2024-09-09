@@ -1,6 +1,7 @@
 use crate::error::GraphOfHumanityErrors;
 use crate::event::JudgeRandomnessRevealed;
 use crate::state::{CitizenshipApplication, Member, Treasury};
+use crate::constants::NUM_OF_JUDGES;
 use anchor_lang::prelude::*;
 use sha2::{Digest, Sha256};
 use std::collections::HashSet;
@@ -21,7 +22,7 @@ pub struct RevealRandomnessJudges<'info> {
     #[account(
         mut,
         constraint = citizenship_appl.fee_paid == true && citizenship_appl.voucher_fee_paid == true @GraphOfHumanityErrors::CanNotAssignJudgesBeforeFeePaid,
-        constraint = citizenship_appl.judges.len() as u64 == 5 || citizenship_appl.judges.len() as u64 == treasury.num_of_citizens @GraphOfHumanityErrors::CitizenApplJudgesAlreadyAssigned
+        constraint = citizenship_appl.judges.len() as u64 == NUM_OF_JUDGES || citizenship_appl.judges.len() as u64 == treasury.num_of_citizens @GraphOfHumanityErrors::CitizenApplJudgesAlreadyAssigned
     )]
     pub citizenship_appl: Account<'info, CitizenshipApplication>,
     /// CHECK: The account's data is validated manually within the handler.
@@ -53,10 +54,10 @@ pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
         Err(_) => {},
         Ok(random_val) => {
             let mut judges = citizenship_appl.judges.clone();
-            if citizens < 5 {
+            if citizens < NUM_OF_JUDGES {
                 judges = (0..citizens).collect();
             } else {
-                let numbers: Vec<u64> = (0..5)
+                let numbers: Vec<u64> = (0..NUM_OF_JUDGES as usize)
                     .map(|i| {
                         let start = i * 6;
                         random_val[start..start + 6]
@@ -69,7 +70,7 @@ pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
 
                 let mut unique_judges = HashSet::new();
                 for num in numbers.iter() {
-                    if judges.len() == 5 {
+                    if judges.len() as u64== NUM_OF_JUDGES {
                         break;
                     }
                     let hashed = sha256_hash(*num, seed);
