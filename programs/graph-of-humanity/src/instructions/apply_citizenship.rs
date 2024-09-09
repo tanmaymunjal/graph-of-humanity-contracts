@@ -16,7 +16,8 @@ pub struct ApplyCitizenship<'info> {
             b"member"
         ],
         bump=member.bump,
-        constraint = member.appeal_pending == false @GraphOfHumanityErrors::CitizenshipApplicationPending
+        constraint = member.appeal_pending == false @GraphOfHumanityErrors::CitizenshipApplicationPending,
+        constraint = member.citizen == false @GraphOfHumanityErrors::DontReapplyForCitizenWhenAlreadyOne
     )]
     pub member: Account<'info, Member>,
     #[account(
@@ -60,7 +61,7 @@ pub fn handler(
     citizenship_appl.fee_paid = false;
     citizenship_appl.voucher_fee_paid = false;
     citizenship_appl.appeal_number = member.num_of_appeals;
-    citizenship_appl.judge_selected = false;
+    citizenship_appl.judges = vec![];
     citizenship_appl.randomness_account = None;
 
     member.num_of_appeals += 1;

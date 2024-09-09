@@ -1,6 +1,6 @@
 use crate::error::GraphOfHumanityErrors;
 use crate::event::JudgeRandomnessRequested;
-use crate::state::{CitizenshipApplication, Member};
+use crate::state::{CitizenshipApplication, Member, Treasury};
 use anchor_lang::prelude::*;
 use switchboard_on_demand::accounts::RandomnessAccountData;
 
@@ -19,11 +19,19 @@ pub struct RequestRandomnessJudges<'info> {
     #[account(
         mut,
         constraint = citizenship_appl.fee_paid == true && citizenship_appl.voucher_fee_paid == true @GraphOfHumanityErrors::CanNotAssignJudgesBeforeFeePaid,
-        constraint = citizenship_appl.judge_selected == false @GraphOfHumanityErrors::CitizenApplJudgesAlreadyAssigned
+        constraint = citizenship_appl.judges.len() as u64 == 5 || citizenship_appl.judges.len() as u64 == treasury.num_of_citizens @GraphOfHumanityErrors::CitizenApplJudgesAlreadyAssigned,
+        constraint = citizenship_appl.randomness_account == None @GraphOfHumanityErrors::RandomnessJudgeAlreadyRequested
     )]
     pub citizenship_appl: Account<'info, CitizenshipApplication>,
     /// CHECK: The account's data is validated manually within the handler.
     pub randomness_account_data: AccountInfo<'info>,
+    #[account(
+        seeds = [
+            b"treasury"
+        ],
+        bump=treasury.bump
+    )]
+    pub treasury: Account<'info, Treasury>,
     pub system_program: Program<'info, System>,
 }
 

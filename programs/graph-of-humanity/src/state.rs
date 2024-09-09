@@ -18,6 +18,7 @@ pub struct Member {
 #[derive(InitSpace)]
 pub struct Treasury {
     pub bump: u8,
+    pub num_of_citizens: u64,
 }
 
 #[account]
@@ -33,8 +34,10 @@ pub struct CitizenshipApplication {
     pub fee_paid: bool,
     pub voucher_fee_paid: bool,
     pub appeal_number: u8,
-    pub judge_selected: bool,
+    #[max_len(5)]
+    pub judges: Vec<u64>,
     pub randomness_account: Option<Pubkey>,
+    pub citizen_index: Option<u64>
 }
 
 #[account]

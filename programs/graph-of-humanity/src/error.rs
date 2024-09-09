@@ -37,4 +37,16 @@ pub enum GraphOfHumanityErrors {
     // 6008
     #[msg("Randomness already revealed")]
     RandomnessAlreadyRevealed,
+
+    // 6009
+    #[msg("Judge randomness is not stored in this account")]
+    JudgeRandomnessNotStoredHere,
+
+    // 6010
+    #[msg("Randomness already requested, pls use it first")]
+    RandomnessJudgeAlreadyRequested,
+
+    // 6010
+    #[msg("You are already a citizien, why are you re-applying?")]
+    DontReapplyForCitizenWhenAlreadyOne,
 }

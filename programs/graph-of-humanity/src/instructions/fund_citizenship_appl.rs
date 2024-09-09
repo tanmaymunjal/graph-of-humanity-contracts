@@ -1,4 +1,5 @@
 use crate::constants::CITIZENSHIP_FEE;
+use crate::error::GraphOfHumanityErrors;
 use crate::event::CitizenshipFeePaid;
 use crate::state::{CitizenshipApplication, Member, Treasury};
 use anchor_lang::prelude::*;
@@ -7,7 +8,6 @@ use anchor_spl::{
     mint::USDC,
     token::{transfer, Mint, Token, TokenAccount, Transfer},
 };
-use crate::error::GraphOfHumanityErrors;
 
 #[derive(Accounts)]
 pub struct FundCitizenshipAppl<'info> {

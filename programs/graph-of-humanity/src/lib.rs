@@ -40,8 +40,12 @@ pub mod graph_of_humanity {
         fund_voucher::handler(ctx)
     }
 
-    pub fn request_randomness_voters(ctx:Context<RequestRandomnessJudges>) -> Result<()>{
+    pub fn request_randomness_voters(ctx: Context<RequestRandomnessJudges>) -> Result<()> {
         request_randomness_voters::handler(ctx)
+    }
+
+    pub fn reveal_randomness_voters(ctx: Context<RevealRandomnessJudges>) -> Result<()>{
+        reveal_randomness_voters::handler(ctx)
     }
 }
 

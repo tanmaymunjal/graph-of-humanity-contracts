@@ -47,3 +47,9 @@ pub struct ContractInitialized {
 pub struct JudgeRandomnessRequested {
     pub citizenship_appl: Pubkey,
 }
+
+#[event]
+pub struct JudgeRandomnessRevealed {
+    pub citizenship_appl: Pubkey,
+    pub choosen_judges: Vec<u64>
+}
