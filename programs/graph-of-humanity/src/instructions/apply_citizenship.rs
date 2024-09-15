@@ -4,6 +4,7 @@ use crate::state::{CitizenshipApplication, Member};
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
+#[instruction(citizenship_id: String)]
 pub struct ApplyCitizenship<'info> {
     #[account(mut)]
     pub member_creator: Signer<'info>,
@@ -35,7 +36,7 @@ pub struct ApplyCitizenship<'info> {
         space=8+CitizenshipApplication::INIT_SPACE,
         seeds = [
             member.key().as_ref(),
-            &member.num_of_appeals.to_le_bytes(),
+            citizenship_id.as_bytes(),
             b"citizenship_appl"
         ],
         bump
@@ -46,6 +47,7 @@ pub struct ApplyCitizenship<'info> {
 
 pub fn handler(
     ctx: Context<ApplyCitizenship>,
+    _citizenship_id: String,
     video_link: String,
     other_verifying_links: Option<String>,
 ) -> Result<()> {

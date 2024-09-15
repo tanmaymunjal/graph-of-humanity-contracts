@@ -30,10 +30,11 @@ pub mod graph_of_humanity {
 
     pub fn apply_citizenship(
         ctx: Context<ApplyCitizenship>,
+        _citizenship_id: String,
         video_link: String,
         other_verifying_links: Option<String>,
     ) -> Result<()> {
-        apply_citizenship::handler(ctx, video_link, other_verifying_links)
+        apply_citizenship::handler(ctx, _citizenship_id, video_link, other_verifying_links)
     }
 
     pub fn fund_voucher(ctx: Context<FundVoucher>) -> Result<()> {

@@ -35,10 +35,11 @@ describe("graph-of-humanity", () => {
       6
     );
 
-    const tx = await program.methods.initialize("Welcome to my world!")
+    const tx = await program.methods
+      .initialize("Welcome to my world!")
       .accounts({
         initializer: initializeSigner.publicKey,
-        usdcMint: mintAddress  
+        usdcMint: mintAddress,
       })
       .signers([initializeSigner])
       .rpc(rpcConfig);
@@ -48,8 +49,14 @@ describe("graph-of-humanity", () => {
   });
 
   it("Become member!", async () => {
-    await program.methods.registerMember("Tanmay","https://p.ip.fi/_dQK").accounts({
-      memberCreator: global.user.publicKey
-    }).signers([global.user]).rpc(rpcConfig);
-  })
+    let memberCreator = await create_keypair();
+    await program.methods
+      .registerMember("Tanmay", "https://p.ip.fi/_dQK")
+      .accounts({
+        memberCreator: memberCreator.publicKey,
+      })
+      .signers([memberCreator])
+      .rpc(rpcConfig);
+    global.memberCreator = memberCreator;
+  });
 });

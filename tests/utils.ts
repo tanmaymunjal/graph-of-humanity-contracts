@@ -5,7 +5,8 @@ import { GraphOfHumanity } from "../target/types/graph_of_humanity";
 anchor.setProvider(anchor.AnchorProvider.env());
 
 //testing defios workspace here
-const program = anchor.workspace.GraphOfHumanity as anchor.Program<GraphOfHumanity>;
+const program = anchor.workspace
+  .GraphOfHumanity as anchor.Program<GraphOfHumanity>;
 const {
   provider: { connection },
 } = program;

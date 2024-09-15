@@ -24,7 +24,7 @@ pub fn handler(ctx: Context<BecomeMember>, citizen_name: String, bio_link: Strin
     let member_creator = &ctx.accounts.member_creator;
 
     member.bump = ctx.bumps.member;
-    member.member_creator.key();
+    member.member_creator = member_creator.key();
     member.citizen_name = citizen_name.clone();
     member.bio_link = bio_link.clone();
     member.citizen = false;
