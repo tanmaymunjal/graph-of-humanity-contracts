@@ -28,7 +28,7 @@ pub struct InitializeContract<'info> {
         associated_token::authority = treasury
     )]
     pub treasury_token_account: Account<'info, TokenAccount>,
-    #[account(address=USDC)]
+    // #[account(address=USDC)]
     pub usdc_mint: Account<'info, Mint>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
