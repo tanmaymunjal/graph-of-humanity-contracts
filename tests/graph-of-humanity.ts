@@ -10,7 +10,7 @@ import {
   createMint,
   mintTo,
   transfer,
-  getOrCreateAssociatedTokenAccount,
+  createAssociatedTokenAccount,
 } from "@solana/spl-token";
 
 describe("graph-of-humanity", () => {
@@ -35,6 +35,22 @@ describe("graph-of-humanity", () => {
       6
     );
 
+    const signerTokenAddr = await createAssociatedTokenAccount(
+      connection,
+      initializeSigner,
+      mintAddress,
+      initializeSigner.publicKey
+    );
+
+    await mintTo(
+      connection,
+      initializeSigner,
+      mintAddress,
+      signerTokenAddr,
+      initializeSigner,
+      30 * Math.pow(10, 6)
+    );
+
     const tx = await program.methods
       .initialize("Welcome to my world!")
       .accounts({
@@ -45,11 +61,16 @@ describe("graph-of-humanity", () => {
       .rpc(rpcConfig);
     console.log("Your transaction signature", tx);
     global.user = initializeSigner;
+    global.signerTokenAddr = signerTokenAddr;
     global.usdcMint = mintAddress;
   });
 
   it("Become member!", async () => {
     let memberCreator = await create_keypair();
+    let member = await get_pda_from_seeds([
+      memberCreator.publicKey.toBuffer(),
+      Buffer.from("member"),
+    ]);
     await program.methods
       .registerMember("Tanmay", "https://p.ip.fi/_dQK")
       .accounts({
@@ -58,5 +79,74 @@ describe("graph-of-humanity", () => {
       .signers([memberCreator])
       .rpc(rpcConfig);
     global.memberCreator = memberCreator;
+    global.member = member;
+  });
+
+  it("Apply citizenship", async () => {
+    const citizenshipAppl = await get_pda_from_seeds([
+      global.member.toBuffer(),
+      Buffer.from("1"),
+      Buffer.from("citizenship_appl"),
+    ]);
+    await program.methods
+      .applyCitizenship("1", "https://p.ip.fi/_dQK", null)
+      .accountsPartial({
+        memberCreator: global.memberCreator.publicKey,
+        memberVoucher: global.user.publicKey,
+        citizenshipAppl: citizenshipAppl,
+      })
+      .signers([global.memberCreator])
+      .rpc(rpcConfig);
+    global.citizenshipAppl = citizenshipAppl;
+  });
+
+  it("Edit bio", async () => {
+    await program.methods
+      .editBio("life imprisonment")
+      .accounts({
+        memberCreator: global.memberCreator.publicKey,
+      })
+      .signers([global.memberCreator])
+      .rpc(rpcConfig);
+  });
+
+  it("Fund voucher", async () => {
+    await program.methods
+      .fundVoucher()
+      .accountsPartial({
+        memberVoucher: global.user.publicKey,
+        citizenshipAppl: global.citizenshipAppl,
+        usdcMint: global.usdcMint,
+      })
+      .signers([global.user])
+      .rpc(rpcConfig);
+  });
+
+  it("Fund appl", async () => {
+    const signerTokenAddr = await createAssociatedTokenAccount(
+      connection,
+      global.memberCreator,
+      global.usdcMint,
+      global.memberCreator.publicKey
+    );
+
+    await mintTo(
+      connection,
+      global.memberCreator,
+      global.usdcMint,
+      signerTokenAddr,
+      global.user,
+      30 * Math.pow(10, 6)
+    );
+
+    await program.methods
+      .fundCitizenshipAppl()
+      .accountsPartial({
+        memberCreator: global.memberCreator.publicKey,
+        citizenshipAppl: global.citizenshipAppl,
+        usdcMint: global.usdcMint,
+      })
+      .signers([global.memberCreator])
+      .rpc(rpcConfig);
   });
 });

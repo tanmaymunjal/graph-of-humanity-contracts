@@ -31,7 +31,7 @@ pub struct FundCitizenshipAppl<'info> {
         mut,
         seeds = [
             member.key().as_ref(),
-            &citizenship_appl.appeal_number.to_le_bytes(),
+            citizenship_appl.appl_id.as_bytes(),
             b"citizenship_appl"
         ],
         constraint = citizenship_appl.fee_paid == false @GraphOfHumanityErrors::CitizenshipApplAlreadyFunded,
@@ -51,7 +51,7 @@ pub struct FundCitizenshipAppl<'info> {
         associated_token::authority = treasury
     )]
     pub treasury_token_account: Account<'info, TokenAccount>,
-    #[account(address=USDC)]
+    // #[account(address=USDC)]
     pub usdc_mint: Account<'info, Mint>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -61,7 +61,7 @@ pub struct FundCitizenshipAppl<'info> {
 pub fn handler(ctx: Context<FundCitizenshipAppl>) -> Result<()> {
     let member_token_account = &mut ctx.accounts.member_token_account;
     let member_creator = &mut ctx.accounts.member_creator;
-    let treasury = &ctx.accounts.treasury;
+    let treasury_token_account = &mut ctx.accounts.treasury_token_account;
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
 
     let fee = 2u64.pow(citizenship_appl.appeal_number as u32) * CITIZENSHIP_FEE;
@@ -70,7 +70,7 @@ pub fn handler(ctx: Context<FundCitizenshipAppl>) -> Result<()> {
             ctx.accounts.token_program.to_account_info(),
             Transfer {
                 from: member_token_account.to_account_info(),
-                to: treasury.to_account_info(),
+                to: treasury_token_account.to_account_info(),
                 authority: member_creator.to_account_info(),
             },
         ),

@@ -28,16 +28,7 @@ pub struct ClaimVoteReward<'info> {
     )]
     pub voter_member: Account<'info, Member>,
     #[account(
-        seeds = [
-            voter_member.key().as_ref(),
-            &voter_member.num_of_appeals.to_le_bytes(),
-            b"citizenship_appl"
-        ],
-        bump=voter_citizenship.bump
-    )]
-    pub voter_citizenship: Account<'info, CitizenshipApplication>,
-    #[account(
-        constraint = member_citizenship_appl.judges.contains(&voter_citizenship.citizen_index.unwrap()) @ GraphOfHumanityErrors::VoterNotInJudges,
+        constraint = member_citizenship_appl.judges.contains(&voter_member.citizen_index.unwrap()) @ GraphOfHumanityErrors::VoterNotInJudges,
         constraint = member_citizenship_appl.voting_started.is_some() @ GraphOfHumanityErrors::VotingNotStarted,
         constraint = Clock::get()?.unix_timestamp - member_citizenship_appl.voting_started.unwrap() > DAY @ GraphOfHumanityErrors::VotingStillOngoing
     )]

@@ -4,7 +4,7 @@ use crate::state::{CitizenshipApplication, Member};
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction(citizenship_id: String)]
+#[instruction(appl_id: String)]
 pub struct ApplyCitizenship<'info> {
     #[account(mut)]
     pub member_creator: Signer<'info>,
@@ -36,7 +36,7 @@ pub struct ApplyCitizenship<'info> {
         space=8+CitizenshipApplication::INIT_SPACE,
         seeds = [
             member.key().as_ref(),
-            citizenship_id.as_bytes(),
+            appl_id.as_bytes(),
             b"citizenship_appl"
         ],
         bump
@@ -47,7 +47,7 @@ pub struct ApplyCitizenship<'info> {
 
 pub fn handler(
     ctx: Context<ApplyCitizenship>,
-    _citizenship_id: String,
+    appl_id: String,
     video_link: String,
     other_verifying_links: Option<String>,
 ) -> Result<()> {
@@ -72,14 +72,16 @@ pub fn handler(
     citizenship_appl.reject_votes = 0;
     citizenship_appl.randomness_account = None;
     citizenship_appl.voting_started = None;
-    citizenship_appl.citizen_index = None;
+    citizenship_appl.appl_id = appl_id;
+
+    member.appeal_pending = true;
 
     emit!(CitizenshipApplied {
         member: member.key(),
         voucher_member: member_voucher.key(),
         video_link: video_link,
         other_verifying_links: other_verifying_links,
-        appeal_number: member.num_of_appeals - 1
+        appeal_number: member.num_of_appeals
     });
 
     Ok(())

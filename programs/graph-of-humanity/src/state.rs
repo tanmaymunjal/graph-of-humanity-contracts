@@ -12,6 +12,7 @@ pub struct Member {
     pub citizen: bool,
     pub num_of_appeals: u8,
     pub appeal_pending: bool,
+    pub citizen_index: Option<u64>,
 }
 
 #[account]
@@ -27,6 +28,8 @@ pub struct CitizenshipApplication {
     pub bump: u8,
     pub member: Pubkey,
     pub voucher_member: Pubkey,
+    #[max_len(64)]
+    pub appl_id: String,
     #[max_len(100)]
     pub video_link: String,
     #[max_len(100)]
@@ -40,7 +43,6 @@ pub struct CitizenshipApplication {
     pub reject_votes: u8,
     pub randomness_account: Option<Pubkey>,
     pub voting_started: Option<i64>,
-    pub citizen_index: Option<u64>,
 }
 
 #[account]

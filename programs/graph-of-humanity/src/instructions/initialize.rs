@@ -28,7 +28,7 @@ pub struct InitializeContract<'info> {
         associated_token::mint = usdc_mint,
         associated_token::authority = treasury
     )]
-    pub treasury_token_account: Account<'info, TokenAccount>,
+    pub treasury_token_account: Box<Account<'info, TokenAccount>>,
     // #[account(address=USDC)]
     pub usdc_mint: Box<Account<'info, Mint>>,
     #[account(
@@ -75,6 +75,7 @@ pub fn handler(ctx: Context<InitializeContract>, initialize_message: String) -> 
     member.citizen = true;
     member.num_of_appeals = 0;
     member.appeal_pending = false;
+    member.citizen_index = Some(1);
 
     citizenship_appl.bump = ctx.bumps.citizenship_appl;
     citizenship_appl.member = member.key();
@@ -89,7 +90,6 @@ pub fn handler(ctx: Context<InitializeContract>, initialize_message: String) -> 
     citizenship_appl.reject_votes = 0;
     citizenship_appl.randomness_account = None;
     citizenship_appl.voting_started = None;
-    citizenship_appl.citizen_index = Some(1);
 
     emit!(ContractInitialized {
         message: initialize_message

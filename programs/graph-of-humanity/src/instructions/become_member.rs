@@ -30,6 +30,7 @@ pub fn handler(ctx: Context<BecomeMember>, citizen_name: String, bio_link: Strin
     member.citizen = false;
     member.num_of_appeals = 0;
     member.appeal_pending = false;
+    member.citizen_index = None;
 
     emit!(MemberRegistered {
         member_creator: member_creator.key(),

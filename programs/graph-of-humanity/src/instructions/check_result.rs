@@ -41,11 +41,12 @@ pub fn handler(ctx: Context<CheckVoteResult>) -> Result<()> {
     let mut accepted = false;
     if citizenship_appl.accept_vote > citizenship_appl.reject_votes {
         member.citizen = true;
-        citizenship_appl.citizen_index = Some(treasury.num_of_citizens);
+        member.citizen_index = Some(treasury.num_of_citizens);
         treasury.num_of_citizens += 1;
         accepted = true;
     } else {
         member.num_of_appeals += 1;
+        member.appeal_pending = false;
     };
 
     emit!(CitizenshipResultDeclared {
