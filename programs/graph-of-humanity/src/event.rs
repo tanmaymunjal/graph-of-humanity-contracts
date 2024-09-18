@@ -73,3 +73,20 @@ pub struct RewardClaimed {
     pub citizenship_appl: Pubkey,
     pub voter: Pubkey,
 }
+
+#[event]
+pub struct DistributionEpochStarted {
+    pub num_of_users_to_distribute: u64,
+    pub started: i64,
+}
+
+#[event]
+pub struct MoneyDonated {
+    pub doner: Pubkey,
+    pub amount: u64,
+}
+
+#[event]
+pub struct UBISelection {
+    pub accounts: Vec<u64>,
+}

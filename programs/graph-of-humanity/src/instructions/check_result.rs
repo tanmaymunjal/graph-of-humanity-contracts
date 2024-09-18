@@ -13,7 +13,7 @@ pub struct CheckVoteResult<'info> {
         mut,
         seeds = [
             member.key().as_ref(),
-            &member.num_of_appeals.to_le_bytes(),
+            member_citizenship_appl.appl_id.as_bytes(),
             b"citizenship_appl"
         ],
         bump=member_citizenship_appl.bump,

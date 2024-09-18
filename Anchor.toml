@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-graph_of_humanity = "GigY2BgaW1iJn5JQS2JbBCDkVbPeLErNpJqpwoQY63YD"
+graph_of_humanity = "3ks4Yn5ahaxnjawTWRHhUGTqB2n4TSxCB1K3xzArAj36"
 
 [registry]
 url = "https://api.apr.dev"

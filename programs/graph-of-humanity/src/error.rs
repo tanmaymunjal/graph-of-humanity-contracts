@@ -73,4 +73,28 @@ pub enum GraphOfHumanityErrors {
     // 6016
     #[msg("You have already claimed your money")]
     AlreadyClaimedVoterMoney,
+
+    // 6017
+    #[msg("Can not start another distribution epoch when one is already in place")]
+    CanNotStartDistributionEpochWhenOneIsAlreadyRunning,
+
+    // 6018
+    #[msg("Can not request ubi randomness when epoch has not even started")]
+    NoEpochStarted,
+
+    // 6018
+    #[msg("Not enough money in treasury to start epoch")]
+    NotEnoughFundsToStartEpoch,
+
+    // 6019
+    #[msg("Randomness for this acc already full")]
+    RandomnessFull,
+
+    // 6020
+    #[msg("Wrong epoch for randomness acc")]
+    WrongEpochSelected,
+
+    // 6021
+    #[msg("Wrong randomness account selected")]
+    WrongRandomnessAccountSelected,
 }

@@ -1,3 +1,4 @@
+use crate::constants::{NUM_OF_JUDGES, UBI_USERS_PER_ACC};
 use anchor_lang::prelude::*;
 
 #[account]
@@ -20,6 +21,8 @@ pub struct Member {
 pub struct Treasury {
     pub bump: u8,
     pub num_of_citizens: u64,
+    pub distributions: u64,
+    pub distribution_active: bool,
 }
 
 #[account]
@@ -37,7 +40,7 @@ pub struct CitizenshipApplication {
     pub fee_paid: bool,
     pub voucher_fee_paid: bool,
     pub appeal_number: u8,
-    #[max_len(5)]
+    #[max_len(NUM_OF_JUDGES)]
     pub judges: Vec<u64>,
     pub accept_vote: u8,
     pub reject_votes: u8,
@@ -53,4 +56,23 @@ pub struct CommitteeVotes {
     pub citizenship_appl: Pubkey,
     pub accept: bool,
     pub claimed: bool,
+}
+
+#[account]
+#[derive(InitSpace)]
+pub struct DistributionEpoch {
+    pub bump: u8,
+    pub num_of_users_to_distribute: u64,
+    pub num_of_users_distributed: u64,
+    pub distribution_max_user_ind: u64,
+}
+
+#[account]
+#[derive(InitSpace)]
+pub struct UBIRandomnessAccount {
+    pub bump: u8,
+    pub epoch: Pubkey,
+    pub randomness_account: Pubkey,
+    #[max_len(UBI_USERS_PER_ACC)]
+    pub accounts: Vec<u64>,
 }

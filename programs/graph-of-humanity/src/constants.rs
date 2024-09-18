@@ -5,6 +5,8 @@ pub const CITIZENSHIP_FEE: u64 = 15;
 #[constant]
 pub const NUM_OF_JUDGES: u64 = 5;
 #[constant]
+pub const UBI_USERS_PER_ACC: u64 = 5;
+#[constant]
 pub const MINUTE: i64 = 60;
 #[constant]
 pub const HOUR: i64 = 60 * MINUTE;

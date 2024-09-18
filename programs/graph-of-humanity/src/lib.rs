@@ -4,9 +4,10 @@ pub mod error;
 pub mod event;
 pub mod instructions;
 pub mod state;
+pub mod utils;
 
 use instructions::*;
-declare_id!("GigY2BgaW1iJn5JQS2JbBCDkVbPeLErNpJqpwoQY63YD");
+declare_id!("3ks4Yn5ahaxnjawTWRHhUGTqB2n4TSxCB1K3xzArAj36");
 
 #[program]
 pub mod graph_of_humanity {
@@ -67,5 +68,20 @@ pub mod graph_of_humanity {
 
     pub fn claim_reward(ctx: Context<ClaimVoteReward>) -> Result<()> {
         claim_reward::handler(ctx)
+    }
+
+    pub fn start_distribution_epoch(ctx: Context<StartDistribution>) -> Result<()> {
+        start_distribution_epoch::handler(ctx)
+    }
+
+    pub fn donate_money(ctx: Context<DonateMoney>, amount: u64) -> Result<()> {
+        donate_money::handler(ctx, amount)
+    }
+
+    pub fn request_ubi_randomness(
+        ctx: Context<RequestRandomnessUBI>,
+        randomness_id: String,
+    ) -> Result<()> {
+        request_ubi_randomness::handler(ctx, randomness_id)
     }
 }
