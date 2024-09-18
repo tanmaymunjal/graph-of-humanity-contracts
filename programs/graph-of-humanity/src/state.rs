@@ -76,3 +76,7 @@ pub struct UBIRandomnessAccount {
     #[max_len(UBI_USERS_PER_ACC)]
     pub accounts: Vec<u64>,
 }
+
+#[account]
+#[derive(InitSpace)]
+pub struct ClaimHashMap{}

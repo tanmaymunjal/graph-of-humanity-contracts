@@ -90,3 +90,8 @@ pub struct MoneyDonated {
 pub struct UBISelection {
     pub accounts: Vec<u64>,
 }
+
+#[event]
+pub struct UBIDistributed {
+    pub account: Pubkey
+}

@@ -97,4 +97,12 @@ pub enum GraphOfHumanityErrors {
     // 6021
     #[msg("Wrong randomness account selected")]
     WrongRandomnessAccountSelected,
+
+    // 6022
+    #[msg("Can not claim UBI as a non-citizen")]
+    CanNotClaimUBI,
+
+    // 6023
+    #[msg("Can not claim ubi if not chhoosen")]
+    CanNotClaimUBIIfNotChoosen
 }

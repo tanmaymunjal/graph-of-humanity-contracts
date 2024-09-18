@@ -21,7 +21,6 @@ pub struct RevealRandomnessUBI<'info> {
     )]
     pub treasury: Account<'info, Treasury>,
     #[account(
-        mut,
         seeds = [
             &treasury.distributions.to_le_bytes(),
             b"di_epoch",
@@ -42,12 +41,12 @@ pub struct RevealRandomnessUBI<'info> {
 pub fn handler(ctx: Context<RevealRandomnessUBI>) -> Result<()> {
     let clock = Clock::get()?;
     let randomness_account = &ctx.accounts.randomness_account_data;
-    let treasury = &ctx.accounts.treasury;
+    let epoch = &ctx.accounts.epoch;
     let ubi_randomness_acc = &mut ctx.accounts.ubi_randomness_acc;
 
     let randomness_data = RandomnessAccountData::parse(randomness_account.data.borrow()).unwrap();
     let revealed_random_value = randomness_data.get_value(&clock);
-    let citizens = treasury.num_of_citizens;
+    let citizens = epoch.distribution_max_user_ind;
     let mut recipients = ubi_randomness_acc.accounts.clone();
 
     match revealed_random_value {

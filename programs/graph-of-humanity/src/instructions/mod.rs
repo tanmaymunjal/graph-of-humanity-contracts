@@ -13,6 +13,7 @@ pub mod reveal_randomness_voters;
 pub mod reveal_ubi_randomness;
 pub mod start_distribution_epoch;
 pub mod vote;
+pub mod claim_ubi;
 
 pub use apply_citizenship::*;
 pub use become_member::*;
@@ -29,3 +30,4 @@ pub use reveal_randomness_voters::*;
 pub use reveal_ubi_randomness::*;
 pub use start_distribution_epoch::*;
 pub use vote::*;
+pub use claim_ubi::*;
