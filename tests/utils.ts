@@ -31,4 +31,8 @@ async function get_pda_from_seeds(seeds) {
   return web3.PublicKey.findProgramAddressSync(seeds, program.programId)[0];
 }
 
-export { create_keypair, get_pda_from_seeds };
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export { create_keypair, get_pda_from_seeds, sleep };

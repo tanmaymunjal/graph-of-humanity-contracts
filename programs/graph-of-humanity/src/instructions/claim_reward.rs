@@ -57,7 +57,7 @@ pub struct ClaimVoteReward<'info> {
         associated_token::authority = treasury
     )]
     pub treasury_token_account: Account<'info, TokenAccount>,
-    #[account(address=USDC)]
+    // #[account(address=USDC)]
     pub usdc_mint: Account<'info, Mint>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -77,14 +77,16 @@ pub fn handler(ctx: Context<ClaimVoteReward>) -> Result<()> {
     let total_fee = (2u64.pow(member_citizenship_appl.appeal_number as u32) + 1) * CITIZENSHIP_FEE;
     let voter_claim = 16 * (total_fee / 100);
     if vote_acc.accept == accept {
+        let signer_seeds: &[&[&[u8]]] = &[&[b"treasury", &[treasury.bump]]];
         transfer(
-            CpiContext::new(
+            CpiContext::new_with_signer(
                 ctx.accounts.token_program.to_account_info(),
                 Transfer {
                     from: treasury_token_account.to_account_info(),
                     to: voter_token_account.to_account_info(),
                     authority: treasury.to_account_info(),
                 },
+                signer_seeds,
             ),
             voter_claim,
         )?;

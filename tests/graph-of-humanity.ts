@@ -2,14 +2,13 @@ import * as anchor from "@coral-xyz/anchor";
 import { Program, BN } from "@coral-xyz/anchor";
 import { GraphOfHumanity } from "../target/types/graph_of_humanity";
 import { rpcConfig } from "./test_config";
-import { create_keypair, get_pda_from_seeds } from "./utils";
+import { create_keypair, get_pda_from_seeds, sleep } from "./utils";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress,
   createMint,
   mintTo,
-  transfer,
   createAssociatedTokenAccount,
 } from "@solana/spl-token";
 import {
@@ -21,6 +20,7 @@ import {
 } from "@orao-network/solana-vrf";
 import nacl from "tweetnacl";
 import { PublicKey, LAMPORTS_PER_SOL, Keypair } from "@solana/web3.js";
+import { rpc } from "@coral-xyz/anchor/dist/cjs/utils";
 
 describe("graph-of-humanity", () => {
   // Configure the client to use the local cluster.
@@ -280,5 +280,60 @@ describe("graph-of-humanity", () => {
         })
         .signers([cranker])
         .rpc(rpcConfig);
+  });
+  it("Vote for user", async () => {
+    let voteAcc = await get_pda_from_seeds([
+      Buffer.from("vote"),
+      global.user.publicKey.toBuffer(),
+      global.citizenshipAppl.toBuffer(),
+    ]);
+    await program.methods
+      .voteCitizen(true, null)
+      .accounts({
+        voter: global.user.publicKey,
+        voterMember: global.initialMember,
+        member: global.member,
+        memberCitizenshipAppl: global.citizenshipAppl,
+        voteAcc: voteAcc,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .signers([global.user])
+      .rpc(rpcConfig);
+    global.voteAcc = voteAcc;
+  });
+
+  it("Check result", async () => {
+    await sleep(5 * 1000);
+    let cranker = await create_keypair();
+    await program.methods
+      .checkResult()
+      .accounts({
+        cranker: cranker.publicKey,
+        member: global.member,
+        memberCitizenshipAppl: global.citizenshipAppl,
+        treasury: global.treasury,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .signers([cranker])
+      .rpc(rpcConfig);
+  });
+  it("Claim reward for voting correctly", async () => {
+    await program.methods
+      .claimReward()
+      .accounts({
+        voter: global.user.publicKey,
+        voteAcc: global.voteAcc,
+        voterMember: global.initialMember,
+        memberCitizenshipAppl: global.citizenshipAppl,
+        voterTokenAccount: global.signerTokenAddr,
+        treasury: global.treasury,
+        treasuryTokenAccount: global.treasuryTokenAccount,
+        usdcMint: global.usdcMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([global.user])
+      .rpc(rpcConfig);
   });
 });

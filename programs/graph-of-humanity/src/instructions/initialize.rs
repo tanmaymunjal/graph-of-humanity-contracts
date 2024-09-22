@@ -77,7 +77,7 @@ pub fn handler(ctx: Context<InitializeContract>, initialize_message: String) -> 
     member.citizen = true;
     member.num_of_appeals = 0;
     member.appeal_pending = false;
-    member.citizen_index = Some(1);
+    member.citizen_index = Some(0);
 
     citizenship_appl.bump = ctx.bumps.citizenship_appl;
     citizenship_appl.member = member.key();

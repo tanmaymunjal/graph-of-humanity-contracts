@@ -1,4 +1,4 @@
-use crate::constants::DAY;
+use crate::constants::{DAY, NUM_OF_JUDGES};
 use crate::error::GraphOfHumanityErrors;
 use crate::event::CitizenshipResultDeclared;
 use crate::state::{CitizenshipApplication, Member, Treasury};
