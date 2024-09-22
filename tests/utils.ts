@@ -18,7 +18,7 @@ async function create_keypair() {
     {
       signature: await connection.requestAirdrop(
         keypair.publicKey,
-        web3.LAMPORTS_PER_SOL
+        3*web3.LAMPORTS_PER_SOL
       ),
       ...(await connection.getLatestBlockhash()),
     },

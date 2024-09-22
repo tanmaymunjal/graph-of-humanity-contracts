@@ -104,5 +104,9 @@ pub enum GraphOfHumanityErrors {
 
     // 6023
     #[msg("Can not claim ubi if not chhoosen")]
-    CanNotClaimUBIIfNotChoosen
+    CanNotClaimUBIIfNotChoosen,
+
+    // 6024
+    #[msg("Can not use null seed in vrf")]
+    NullSeedInvalidForVrf
 }
