@@ -12,8 +12,15 @@ import {
   transfer,
   createAssociatedTokenAccount,
 } from "@solana/spl-token";
-import { Orao,networkStateAccountAddress,InitBuilder,randomnessAccountAddress } from "@orao-network/solana-vrf";
-import { PublicKey, LAMPORTS_PER_SOL, Keypair} from "@solana/web3.js";
+import {
+  Orao,
+  networkStateAccountAddress,
+  InitBuilder,
+  FulfillBuilder,
+  randomnessAccountAddress,
+} from "@orao-network/solana-vrf";
+import nacl from "tweetnacl";
+import { PublicKey, LAMPORTS_PER_SOL, Keypair } from "@solana/web3.js";
 
 describe("graph-of-humanity", () => {
   // Configure the client to use the local cluster.
@@ -26,9 +33,18 @@ describe("graph-of-humanity", () => {
   } = program;
   let global: any = {};
   const fulfillmentAuthority = Keypair.generate();
-    // Initialize ORAO VRF client
-    const vrf = new Orao(program.provider);
-    const vrfTreasury = Keypair.generate();
+  // Initialize ORAO VRF client
+  const vrf = new Orao(program.provider);
+  const vrfTreasury = Keypair.generate();
+
+  // This helper will fulfill randomness for our test VRF.
+  async function emulateFulfill(seed: Buffer) {
+    let signature = nacl.sign.detached(seed, fulfillmentAuthority.secretKey);
+    await new FulfillBuilder(vrf, seed).rpc(
+      fulfillmentAuthority.publicKey,
+      signature
+    );
+  }
 
   before(async () => {
     // Initialize test VRF
@@ -37,14 +53,13 @@ describe("graph-of-humanity", () => {
     const configAuthority = Keypair.generate();
 
     await new InitBuilder(
-        vrf,
-        configAuthority.publicKey,
-        vrfTreasury.publicKey,
-        fulfillmentAuthorities,
-        new BN(fee)
+      vrf,
+      configAuthority.publicKey,
+      vrfTreasury.publicKey,
+      fulfillmentAuthorities,
+      new BN(fee)
     ).rpc();
-});
-
+  });
 
   it("Is initialized!", async () => {
     // Add your test here.
@@ -74,21 +89,23 @@ describe("graph-of-humanity", () => {
       30 * Math.pow(10, 6)
     );
 
-    let treasury = await get_pda_from_seeds([
-      Buffer.from("treasury")
-    ])
-    
-    let treasury_token_account = await getAssociatedTokenAddress(mintAddress,treasury,true);
+    let treasury = await get_pda_from_seeds([Buffer.from("treasury")]);
+
+    let treasury_token_account = await getAssociatedTokenAddress(
+      mintAddress,
+      treasury,
+      true
+    );
     let member = await get_pda_from_seeds([
       initializeSigner.publicKey.toBuffer(),
-      Buffer.from("member")
-    ])
+      Buffer.from("member"),
+    ]);
 
     let citizenship_appl = await get_pda_from_seeds([
       member.toBuffer(),
       Buffer.from("Welcome to my world!"),
-      Buffer.from("citizenship_appl")
-    ])
+      Buffer.from("citizenship_appl"),
+    ]);
 
     const tx = await program.methods
       .initialize("Welcome to my world!")
@@ -101,7 +118,7 @@ describe("graph-of-humanity", () => {
         usdcMint: mintAddress,
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([initializeSigner])
       .rpc(rpcConfig);
@@ -126,7 +143,7 @@ describe("graph-of-humanity", () => {
       .accounts({
         memberCreator: memberCreator.publicKey,
         member: member,
-        systemProgram: web3.SystemProgram.programId
+        systemProgram: web3.SystemProgram.programId,
       })
       .signers([memberCreator])
       .rpc(rpcConfig);
@@ -148,7 +165,7 @@ describe("graph-of-humanity", () => {
         memberVoucherAccount: global.initialMember,
         member: global.member,
         citizenshipAppl: citizenshipAppl,
-        systemProgram: web3.SystemProgram.programId
+        systemProgram: web3.SystemProgram.programId,
       })
       .signers([global.memberCreator])
       .rpc(rpcConfig);
@@ -161,7 +178,7 @@ describe("graph-of-humanity", () => {
       .accounts({
         memberCreator: global.memberCreator.publicKey,
         member: global.member,
-        systemProgram: web3.SystemProgram.programId
+        systemProgram: web3.SystemProgram.programId,
       })
       .signers([global.memberCreator])
       .rpc(rpcConfig);
@@ -180,7 +197,7 @@ describe("graph-of-humanity", () => {
         treasuryTokenAccount: global.treasuryTokenAccount,
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([global.user])
       .rpc(rpcConfig);
@@ -215,22 +232,21 @@ describe("graph-of-humanity", () => {
         usdcMint: global.usdcMint,
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([global.memberCreator])
       .rpc(rpcConfig);
   });
 
   it("Request random judges", async () => {
-  
     // Generate a new force (seed) for randomness
     const force = anchor.web3.Keypair.generate().publicKey.toBuffer();
-  
+
     // Calculate the randomness account address
     const randomnessAccount = randomnessAccountAddress(force);
 
     // Get the VRF treasury account
-    const vrfConfig = networkStateAccountAddress();  
+    const vrfConfig = networkStateAccountAddress();
     await program.methods
       .requestRandomnessVoters(Array.from(force))
       .accounts({
@@ -246,5 +262,23 @@ describe("graph-of-humanity", () => {
       })
       .signers([global.user])
       .rpc(rpcConfig);
-    });
+    global.randomnessAccount = randomnessAccount;
+    global.force = force;
   });
+
+  it("Reveal random judges", async () => {
+    let cranker = await create_keypair();
+    await emulateFulfill(global.force),
+      await program.methods
+        .revealRandomnessVoters()
+        .accounts({
+          cranker: cranker.publicKey,
+          citizenshipAppl: global.citizenshipAppl,
+          randomnessAccountData: global.randomnessAccount,
+          treasury: global.treasury,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .signers([cranker])
+        .rpc(rpcConfig);
+  });
+});

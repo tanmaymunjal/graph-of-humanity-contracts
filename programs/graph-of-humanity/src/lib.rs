@@ -46,8 +46,11 @@ pub mod graph_of_humanity {
         fund_voucher::handler(ctx)
     }
 
-    pub fn request_randomness_voters(ctx: Context<RequestRandomnessJudges>, force: [u8;32]) -> Result<()> {
-        request_randomness_voters::handler(ctx,force)
+    pub fn request_randomness_voters(
+        ctx: Context<RequestRandomnessJudges>,
+        force: [u8; 32],
+    ) -> Result<()> {
+        request_randomness_voters::handler(ctx, force)
     }
 
     pub fn reveal_randomness_voters(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
@@ -85,7 +88,7 @@ pub mod graph_of_humanity {
         request_ubi_randomness::handler(ctx, randomness_id)
     }
 
-    pub fn reveal_ubi_randomness(ctx: Context<RevealRandomnessUBI>) -> Result<()>{
+    pub fn reveal_ubi_randomness(ctx: Context<RevealRandomnessUBI>) -> Result<()> {
         reveal_ubi_randomness::handler(ctx)
     }
 }

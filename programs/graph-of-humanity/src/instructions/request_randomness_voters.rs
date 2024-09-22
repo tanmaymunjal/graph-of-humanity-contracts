@@ -60,10 +60,11 @@ pub struct RequestRandomnessJudges<'info> {
 }
 
 pub fn handler(ctx: Context<RequestRandomnessJudges>, force: [u8; 32]) -> Result<()> {
-
     // Zero seed is illegal in VRF
-    require!(force != [0_u8; 32], GraphOfHumanityErrors::NullSeedInvalidForVrf);
-
+    require!(
+        force != [0_u8; 32],
+        GraphOfHumanityErrors::NullSeedInvalidForVrf
+    );
 
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
     let randomness_account = &ctx.accounts.randomness_account;

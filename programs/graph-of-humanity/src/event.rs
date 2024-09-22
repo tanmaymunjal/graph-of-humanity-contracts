@@ -93,5 +93,5 @@ pub struct UBISelection {
 
 #[event]
 pub struct UBIDistributed {
-    pub account: Pubkey
+    pub account: Pubkey,
 }

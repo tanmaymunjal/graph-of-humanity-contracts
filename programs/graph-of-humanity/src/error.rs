@@ -108,5 +108,13 @@ pub enum GraphOfHumanityErrors {
 
     // 6024
     #[msg("Can not use null seed in vrf")]
-    NullSeedInvalidForVrf
+    NullSeedInvalidForVrf,
+
+    // 6025
+    #[msg("Uninitialized acc")]
+    UninitializedRandomAcc,
+
+    // 6026
+    #[msg("Randomness not yet fulfilled")]
+    RandomnessNotYetFulfilled,
 }

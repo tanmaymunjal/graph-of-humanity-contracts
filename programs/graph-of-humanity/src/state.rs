@@ -79,4 +79,4 @@ pub struct UBIRandomnessAccount {
 
 #[account]
 #[derive(InitSpace)]
-pub struct ClaimHashMap{}
+pub struct ClaimHashMap {}

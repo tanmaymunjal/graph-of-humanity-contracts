@@ -1,6 +1,6 @@
 use crate::error::GraphOfHumanityErrors;
-use crate::state::{Member, Treasury,DistributionEpoch,UBIRandomnessAccount,ClaimHashMap};
 use crate::event::UBIDistributed;
+use crate::state::{ClaimHashMap, DistributionEpoch, Member, Treasury, UBIRandomnessAccount};
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
@@ -68,7 +68,7 @@ pub struct ClaimUBI<'info> {
         ],
         bump
     )]
-    pub claim_hashmap: Account<'info,ClaimHashMap>,
+    pub claim_hashmap: Account<'info, ClaimHashMap>,
     // #[account(address=USDC)]
     pub usdc_mint: Account<'info, Mint>,
     pub system_program: Program<'info, System>,
@@ -76,7 +76,7 @@ pub struct ClaimUBI<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn handler(ctx: Context<ClaimUBI>) -> Result<()>{
+pub fn handler(ctx: Context<ClaimUBI>) -> Result<()> {
     let treasury_token_account = &mut ctx.accounts.treasury_token_account;
     let treasury = &mut ctx.accounts.treasury;
     let epoch = &mut ctx.accounts.epoch;
@@ -96,12 +96,12 @@ pub fn handler(ctx: Context<ClaimUBI>) -> Result<()>{
     )?;
 
     epoch.num_of_users_distributed += 1;
-    if epoch.num_of_users_distributed == epoch.num_of_users_to_distribute{
+    if epoch.num_of_users_distributed == epoch.num_of_users_to_distribute {
         treasury.distributions += 1;
         treasury.distribution_active = false;
     };
 
-    emit!(UBIDistributed{
+    emit!(UBIDistributed {
         account: claimer.key()
     });
     Ok(())
