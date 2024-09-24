@@ -38,10 +38,10 @@ pub fn handler(ctx: Context<CheckVoteResult>) -> Result<()> {
     let treasury = &mut ctx.accounts.treasury;
 
     let threshhold;
-    if NUM_OF_JUDGES%2==0{
-        threshhold = NUM_OF_JUDGES/2;
-    }else{
-        threshhold = (NUM_OF_JUDGES/2)+1;
+    if NUM_OF_JUDGES % 2 == 0 {
+        threshhold = NUM_OF_JUDGES / 2;
+    } else {
+        threshhold = (NUM_OF_JUDGES / 2) + 1;
     };
 
     // Check if the number of votes is over half
