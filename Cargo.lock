@@ -2107,6 +2107,8 @@ checksum = "c08d65885ee38876c4f86fa503fb49d7b507c2b62552df7c70b2fce627e06381"
 [[package]]
 name = "orao-solana-vrf"
 version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc429d1f7c4e2b50ae54fe276ca205e5a73cc8570cde6f618c76be583b29d337"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
