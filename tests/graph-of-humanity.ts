@@ -20,7 +20,6 @@ import {
 } from "@orao-network/solana-vrf";
 import nacl from "tweetnacl";
 import { PublicKey, LAMPORTS_PER_SOL, Keypair } from "@solana/web3.js";
-import { rpc } from "@coral-xyz/anchor/dist/cjs/utils";
 
 describe("graph-of-humanity", () => {
   // Configure the client to use the local cluster.
@@ -292,7 +291,6 @@ describe("graph-of-humanity", () => {
       .accounts({
         voter: global.user.publicKey,
         voterMember: global.initialMember,
-        member: global.member,
         memberCitizenshipAppl: global.citizenshipAppl,
         voteAcc: voteAcc,
         systemProgram: web3.SystemProgram.programId,

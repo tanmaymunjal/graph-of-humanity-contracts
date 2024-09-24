@@ -17,12 +17,10 @@ pub struct VoteCitizenship<'info> {
         constraint = voter_member.citizen == true @GraphOfHumanityErrors::CanNotVoteAsANonCitizen
     )]
     pub voter_member: Account<'info, Member>,
-    #[account(constraint = member.citizen == false @GraphOfHumanityErrors::DontReapplyForCitizenWhenAlreadyOne)]
-    pub member: Account<'info, Member>,
     #[account(
         mut,
         seeds = [
-            member.key().as_ref(),
+            member_citizenship_appl.member.as_ref(),
             member_citizenship_appl.appl_id.as_bytes(),
             b"citizenship_appl"
         ],
