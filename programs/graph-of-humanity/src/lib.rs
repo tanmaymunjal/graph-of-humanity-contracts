@@ -83,9 +83,9 @@ pub mod graph_of_humanity {
 
     pub fn request_ubi_randomness(
         ctx: Context<RequestRandomnessUBI>,
-        randomness_id: String,
+        force: [u8; 32],
     ) -> Result<()> {
-        request_ubi_randomness::handler(ctx, randomness_id)
+        request_ubi_randomness::handler(ctx, force)
     }
 
     pub fn reveal_ubi_randomness(ctx: Context<RevealRandomnessUBI>) -> Result<()> {
