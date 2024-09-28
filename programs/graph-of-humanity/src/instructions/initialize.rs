@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     mint::USDC,
-    token::{Mint, Token, TokenAccount},
+    token_interface::{Mint, TokenAccount, TokenInterface},
 };
 
 #[derive(Accounts)]
@@ -28,9 +28,9 @@ pub struct InitializeContract<'info> {
         associated_token::mint = usdc_mint,
         associated_token::authority = treasury
     )]
-    pub treasury_token_account: Box<Account<'info, TokenAccount>>,
+    pub treasury_token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     // #[account(address=USDC)]
-    pub usdc_mint: Box<Account<'info, Mint>>,
+    pub usdc_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,
         payer=initializer,
@@ -55,7 +55,7 @@ pub struct InitializeContract<'info> {
     )]
     pub citizenship_appl: Box<Account<'info, CitizenshipApplication>>,
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 

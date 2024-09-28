@@ -1,6 +1,7 @@
 use crate::event::MemberRegistered;
 use crate::state::Member;
 use anchor_lang::prelude::*;
+
 #[derive(Accounts)]
 pub struct BecomeMember<'info> {
     #[account(mut)]

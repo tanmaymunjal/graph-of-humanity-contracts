@@ -6,7 +6,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     mint::USDC,
-    token::{transfer, Mint, Token, TokenAccount, Transfer},
+    token_interface::{transfer, Mint, TokenAccount, TokenInterface, Transfer},
 };
 
 #[derive(Accounts)]
@@ -26,7 +26,7 @@ pub struct FundCitizenshipAppl<'info> {
         associated_token::mint = usdc_mint,
         associated_token::authority = member_creator
     )]
-    pub member_token_account: Account<'info, TokenAccount>,
+    pub member_token_account: InterfaceAccount<'info, TokenAccount>,
     #[account(
         mut,
         seeds = [
@@ -50,11 +50,11 @@ pub struct FundCitizenshipAppl<'info> {
         associated_token::mint = usdc_mint,
         associated_token::authority = treasury
     )]
-    pub treasury_token_account: Account<'info, TokenAccount>,
+    pub treasury_token_account: InterfaceAccount<'info, TokenAccount>,
     // #[account(address=USDC)]
-    pub usdc_mint: Account<'info, Mint>,
+    pub usdc_mint: InterfaceAccount<'info, Mint>,
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 

@@ -19,7 +19,7 @@ import {
   randomnessAccountAddress,
 } from "@orao-network/solana-vrf";
 import nacl from "tweetnacl";
-import { PublicKey, LAMPORTS_PER_SOL, Keypair } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, Keypair } from "@solana/web3.js";
 
 describe("graph-of-humanity", () => {
   // Configure the client to use the local cluster.
