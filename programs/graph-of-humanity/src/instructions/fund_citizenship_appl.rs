@@ -23,8 +23,9 @@ pub struct FundCitizenshipAppl<'info> {
     pub member: Account<'info, Member>,
     #[account(
         mut,
-        associated_token::mint = usdc_mint,
-        associated_token::authority = member_creator
+        token::mint = usdc_mint,
+        token::authority = member_creator,
+        token::token_program = token_program,
     )]
     pub member_token_account: InterfaceAccount<'info, TokenAccount>,
     #[account(
@@ -47,8 +48,9 @@ pub struct FundCitizenshipAppl<'info> {
     pub treasury: Account<'info, Treasury>,
     #[account(
         mut,
-        associated_token::mint = usdc_mint,
-        associated_token::authority = treasury
+        token::mint = usdc_mint,
+        token::authority = treasury,
+        token::token_program = token_program,
     )]
     pub treasury_token_account: InterfaceAccount<'info, TokenAccount>,
     // #[account(address=USDC)]

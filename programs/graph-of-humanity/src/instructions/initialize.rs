@@ -26,7 +26,8 @@ pub struct InitializeContract<'info> {
         init,
         payer = initializer,
         associated_token::mint = usdc_mint,
-        associated_token::authority = treasury
+        associated_token::authority = treasury,
+        token::token_program = token_program,
     )]
     pub treasury_token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     // #[account(address=USDC)]

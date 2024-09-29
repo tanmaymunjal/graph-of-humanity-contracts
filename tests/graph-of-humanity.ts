@@ -5,11 +5,11 @@ import { rpcConfig } from "./test_config";
 import { create_keypair, get_pda_from_seeds, sleep } from "./utils";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
-  TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress,
   createMint,
   mintTo,
   createAssociatedTokenAccount,
+  TOKEN_2022_PROGRAM_ID
 } from "@solana/spl-token";
 import {
   Orao,
@@ -64,19 +64,24 @@ describe("graph-of-humanity", () => {
     // Add your test here.
     const initializeSigner = await create_keypair();
 
-    const mintAddress = await createMint(
+    const mintAddress = await createMint(      
       connection,
       initializeSigner,
       initializeSigner.publicKey,
       initializeSigner.publicKey,
-      6
+      6,
+      undefined,
+      undefined,
+      TOKEN_2022_PROGRAM_ID
     );
 
     const signerTokenAddr = await createAssociatedTokenAccount(
       connection,
       initializeSigner,
       mintAddress,
-      initializeSigner.publicKey
+      initializeSigner.publicKey,
+      undefined,
+      TOKEN_2022_PROGRAM_ID
     );
 
     await mintTo(
@@ -85,7 +90,10 @@ describe("graph-of-humanity", () => {
       mintAddress,
       signerTokenAddr,
       initializeSigner,
-      30 * Math.pow(10, 6)
+      30 * Math.pow(10, 6),
+      undefined,
+      undefined,
+      TOKEN_2022_PROGRAM_ID
     );
 
     let treasury = await get_pda_from_seeds([Buffer.from("treasury")]);
@@ -93,8 +101,10 @@ describe("graph-of-humanity", () => {
     let treasury_token_account = await getAssociatedTokenAddress(
       mintAddress,
       treasury,
-      true
+      true,
+      TOKEN_2022_PROGRAM_ID
     );
+
     let member = await get_pda_from_seeds([
       initializeSigner.publicKey.toBuffer(),
       Buffer.from("member"),
@@ -116,7 +126,7 @@ describe("graph-of-humanity", () => {
         citizenshipAppl: citizenship_appl,
         usdcMint: mintAddress,
         systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([initializeSigner])
@@ -195,7 +205,7 @@ describe("graph-of-humanity", () => {
         treasury: global.treasury,
         treasuryTokenAccount: global.treasuryTokenAccount,
         systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([global.user])
@@ -207,7 +217,9 @@ describe("graph-of-humanity", () => {
       connection,
       global.memberCreator,
       global.usdcMint,
-      global.memberCreator.publicKey
+      global.memberCreator.publicKey,
+      undefined,
+      TOKEN_2022_PROGRAM_ID
     );
 
     await mintTo(
@@ -216,7 +228,10 @@ describe("graph-of-humanity", () => {
       global.usdcMint,
       signerTokenAddr,
       global.user,
-      30 * Math.pow(10, 6)
+      30 * Math.pow(10, 6),
+      undefined,
+      undefined,
+      TOKEN_2022_PROGRAM_ID
     );
 
     await program.methods
@@ -230,7 +245,7 @@ describe("graph-of-humanity", () => {
         treasuryTokenAccount: global.treasuryTokenAccount,
         usdcMint: global.usdcMint,
         systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([global.memberCreator])
@@ -328,7 +343,7 @@ describe("graph-of-humanity", () => {
         treasuryTokenAccount: global.treasuryTokenAccount,
         usdcMint: global.usdcMint,
         systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([global.user])

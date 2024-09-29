@@ -12,8 +12,9 @@ pub struct DonateMoney<'info> {
     pub doner: Signer<'info>,
     #[account(
         mut,
-        associated_token::mint = usdc_mint,
-        associated_token::authority = doner
+        token::mint = usdc_mint,
+        token::authority = doner,
+        token::token_program=token_program
     )]
     pub doner_token_account: InterfaceAccount<'info, TokenAccount>,
     #[account(
@@ -25,8 +26,9 @@ pub struct DonateMoney<'info> {
     pub treasury: Account<'info, Treasury>,
     #[account(
         mut,
-        associated_token::mint = usdc_mint,
-        associated_token::authority = treasury
+        token::mint = usdc_mint,
+        token::authority = treasury,
+        token::token_program=token_program
     )]
     pub treasury_token_account: InterfaceAccount<'info, TokenAccount>,
     // #[account(address=USDC)]
