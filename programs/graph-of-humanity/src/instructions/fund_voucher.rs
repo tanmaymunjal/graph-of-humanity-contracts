@@ -60,9 +60,12 @@ pub fn handler(ctx: Context<FundVoucher>) -> Result<()> {
     let member_voucher_token_account = &mut ctx.accounts.member_voucher_token_account;
     let member_voucher = &mut ctx.accounts.member_voucher;
     let treasury_token_account = &mut ctx.accounts.treasury_token_account;
+    let usdc_mint = &ctx.accounts.usdc_mint;
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
 
-    let fee = 2u64.pow(citizenship_appl.appeal_number as u32) * CITIZENSHIP_FEE;
+    let fee = 2u64.pow(citizenship_appl.appeal_number as u32)
+        * CITIZENSHIP_FEE
+        * 10u64.pow(usdc_mint.decimals as u32);
     transfer(
         CpiContext::new(
             ctx.accounts.token_program.to_account_info(),

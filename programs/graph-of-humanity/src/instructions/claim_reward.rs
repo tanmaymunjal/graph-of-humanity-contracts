@@ -68,6 +68,7 @@ pub struct ClaimVoteReward<'info> {
 
 pub fn handler(ctx: Context<ClaimVoteReward>) -> Result<()> {
     let treasury = &ctx.accounts.treasury;
+    let usdc_mint = &ctx.accounts.usdc_mint;
     let treasury_token_account = &mut ctx.accounts.treasury_token_account;
     let voter_token_account = &mut ctx.accounts.voter_token_account;
     let vote_acc = &mut ctx.accounts.vote_acc;
@@ -76,7 +77,9 @@ pub fn handler(ctx: Context<ClaimVoteReward>) -> Result<()> {
 
     vote_acc.claimed = true;
     let accept: bool = member_citizenship_appl.accept_vote > member_citizenship_appl.reject_votes;
-    let total_fee = (2u64.pow(member_citizenship_appl.appeal_number as u32) + 1) * CITIZENSHIP_FEE;
+    let total_fee = (2u64.pow(member_citizenship_appl.appeal_number as u32) + 1)
+        * CITIZENSHIP_FEE
+        * 10u64.pow(usdc_mint.decimals as u32);
     let voter_claim = 16 * (total_fee / 100);
     if vote_acc.accept == accept {
         let signer_seeds: &[&[&[u8]]] = &[&[b"treasury", &[treasury.bump]]];

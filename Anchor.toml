@@ -11,7 +11,7 @@ graph_of_humanity = "8ZfLLvCf3v7MjTSjzvMgunCca1BwdoATZtrS3Sx2Ky1F"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "/home/tanmay-munjal/.config/solana/id.json"
 
 [scripts]

@@ -79,6 +79,7 @@ pub struct ClaimUBI<'info> {
 }
 
 pub fn handler(ctx: Context<ClaimUBI>) -> Result<()> {
+    let usdc_mint = &ctx.accounts.usdc_mint;
     let treasury_token_account = &mut ctx.accounts.treasury_token_account;
     let treasury = &mut ctx.accounts.treasury;
     let epoch = &mut ctx.accounts.epoch;
@@ -96,7 +97,7 @@ pub fn handler(ctx: Context<ClaimUBI>) -> Result<()> {
             },
             signer_seeds,
         ),
-        1000,
+        1000 * 10u64.pow(usdc_mint.decimals as u32),
     )?;
 
     epoch.num_of_users_distributed += 1;

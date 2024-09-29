@@ -90,7 +90,7 @@ describe("graph-of-humanity", () => {
       mintAddress,
       signerTokenAddr,
       initializeSigner,
-      30 * Math.pow(10, 9),
+      30 * Math.pow(10, 12),
       undefined,
       undefined,
       TOKEN_2022_PROGRAM_ID
@@ -352,7 +352,7 @@ describe("graph-of-humanity", () => {
   });
   it("Donate money", async () => {
     await program.methods
-      .donateMoney(new BN(1000000))
+      .donateMoney(new BN(100000000000))
       .accounts({
         doner: global.user.publicKey,
         donerTokenAccount: global.signerTokenAddr,

@@ -45,7 +45,7 @@ pub fn handler(ctx: Context<CheckVoteResult>) -> Result<()> {
 
     // Check if the number of votes is over half
     let mut accepted = false;
-    if (citizenship_appl.accept_vote as u64) >= threshhold {
+    if citizenship_appl.accept_vote as u64 >= threshhold {
         member.citizen = true;
         member.citizen_index = Some(treasury.num_of_citizens);
         treasury.num_of_citizens += 1;

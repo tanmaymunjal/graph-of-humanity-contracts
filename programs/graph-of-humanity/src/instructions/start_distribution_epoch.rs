@@ -49,8 +49,9 @@ pub fn handler(ctx: Context<StartDistribution>) -> Result<()> {
     let treasury_token_account = &ctx.accounts.treasury_token_account;
     let treasury = &mut ctx.accounts.treasury;
     let epoch = &mut ctx.accounts.epoch;
+    let usdc_mint = &ctx.accounts.usdc_mint;
 
-    let base_amount = treasury.num_of_citizens * 1000;
+    let base_amount = treasury.num_of_citizens * 1000 * 10u64.pow(usdc_mint.decimals as u32);
     let ratio = treasury_token_account.amount as f64 / base_amount as f64;
 
     let multiplier = if ratio < 0.2 {
