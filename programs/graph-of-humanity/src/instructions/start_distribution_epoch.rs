@@ -26,7 +26,7 @@ pub struct StartDistribution<'info> {
         payer = cranker,
         space = 8 + DistributionEpoch::INIT_SPACE,
         seeds = [
-            &treasury.distributions.to_le_bytes(),
+            treasury.distributions.to_string().as_bytes(),
             b"di_epoch",
         ],
         bump

@@ -23,8 +23,9 @@ pub struct ClaimUBI<'info> {
     pub claimer_member_acc: Account<'info, Member>,
     #[account(
         mut,
-        associated_token::mint = usdc_mint,
-        associated_token::authority = claimer
+        token::mint = usdc_mint,
+        token::authority = claimer,
+        token::token_program = token_program
     )]
     pub claimer_token_account: InterfaceAccount<'info, TokenAccount>,
     #[account(
@@ -38,14 +39,15 @@ pub struct ClaimUBI<'info> {
     pub treasury: Account<'info, Treasury>,
     #[account(
         mut,
-        associated_token::mint = usdc_mint,
-        associated_token::authority = treasury
+        token::mint = usdc_mint,
+        token::authority = treasury,
+        token::token_program = token_program
     )]
     pub treasury_token_account: InterfaceAccount<'info, TokenAccount>,
     #[account(
         mut,
         seeds = [
-            &treasury.distributions.to_le_bytes(),
+            treasury.distributions.to_string().as_bytes(),
             b"di_epoch",
         ],
         bump=epoch.bump
@@ -82,15 +84,17 @@ pub fn handler(ctx: Context<ClaimUBI>) -> Result<()> {
     let epoch = &mut ctx.accounts.epoch;
     let claimer = &ctx.accounts.claimer;
     let claimer_token_account = &mut ctx.accounts.claimer_token_account;
+    let signer_seeds: &[&[&[u8]]] = &[&[b"treasury", &[treasury.bump]]];
 
     transfer(
-        CpiContext::new(
+        CpiContext::new_with_signer(
             ctx.accounts.token_program.to_account_info(),
             Transfer {
                 from: treasury_token_account.to_account_info(),
                 to: claimer_token_account.to_account_info(),
                 authority: treasury.to_account_info(),
             },
+            signer_seeds,
         ),
         1000,
     )?;

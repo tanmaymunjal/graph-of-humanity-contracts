@@ -22,7 +22,7 @@ pub struct RevealRandomnessUBI<'info> {
     pub treasury: Account<'info, Treasury>,
     #[account(
         seeds = [
-            &treasury.distributions.to_le_bytes(),
+            treasury.distributions.to_string().as_bytes(),
             b"di_epoch",
         ],
         bump=epoch.bump

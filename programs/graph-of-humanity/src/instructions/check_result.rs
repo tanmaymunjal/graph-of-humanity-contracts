@@ -18,7 +18,7 @@ pub struct CheckVoteResult<'info> {
         ],
         bump=member_citizenship_appl.bump,
         constraint = member_citizenship_appl.voting_started.is_some() @ GraphOfHumanityErrors::VotingNotStarted,
-        constraint = Clock::get()?.unix_timestamp - member_citizenship_appl.voting_started.unwrap() > DAY @ GraphOfHumanityErrors::VotingStillOngoing
+        constraint = Clock::get()?.unix_timestamp - member_citizenship_appl.voting_started.unwrap() > 5 @ GraphOfHumanityErrors::VotingStillOngoing
     )]
     pub member_citizenship_appl: Account<'info, CitizenshipApplication>,
     #[account(
@@ -37,16 +37,16 @@ pub fn handler(ctx: Context<CheckVoteResult>) -> Result<()> {
     let member = &mut ctx.accounts.member;
     let treasury = &mut ctx.accounts.treasury;
 
-    let threshhold;
-    if NUM_OF_JUDGES % 2 == 0 {
-        threshhold = NUM_OF_JUDGES / 2;
-    } else {
-        threshhold = (NUM_OF_JUDGES / 2) + 1;
+    let mut threshhold;
+    threshhold = (NUM_OF_JUDGES / 2) + 1;
+    if (treasury.num_of_citizens < threshhold) {
+        threshhold = treasury.num_of_citizens;
     };
 
     // Check if the number of votes is over half
     let mut accepted = false;
-    if (citizenship_appl.accept_vote as u64) > threshhold {
+    if (citizenship_appl.accept_vote as u64) >= threshhold {
+        msg!("HHooray!");
         member.citizen = true;
         member.citizen_index = Some(treasury.num_of_citizens);
         treasury.num_of_citizens += 1;

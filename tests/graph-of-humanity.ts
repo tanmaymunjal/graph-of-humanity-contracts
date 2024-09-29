@@ -9,7 +9,7 @@ import {
   createMint,
   mintTo,
   createAssociatedTokenAccount,
-  TOKEN_2022_PROGRAM_ID
+  TOKEN_2022_PROGRAM_ID,
 } from "@solana/spl-token";
 import {
   Orao,
@@ -64,7 +64,7 @@ describe("graph-of-humanity", () => {
     // Add your test here.
     const initializeSigner = await create_keypair();
 
-    const mintAddress = await createMint(      
+    const mintAddress = await createMint(
       connection,
       initializeSigner,
       initializeSigner.publicKey,
@@ -90,7 +90,7 @@ describe("graph-of-humanity", () => {
       mintAddress,
       signerTokenAddr,
       initializeSigner,
-      30 * Math.pow(10, 6),
+      30 * Math.pow(10, 9),
       undefined,
       undefined,
       TOKEN_2022_PROGRAM_ID
@@ -250,6 +250,7 @@ describe("graph-of-humanity", () => {
       })
       .signers([global.memberCreator])
       .rpc(rpcConfig);
+    global.memberTokenAccount = signerTokenAddr;
   });
 
   it("Request random judges", async () => {
@@ -347,6 +348,144 @@ describe("graph-of-humanity", () => {
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .signers([global.user])
+      .rpc(rpcConfig);
+  });
+  it("Donate money", async () => {
+    await program.methods
+      .donateMoney(new BN(1000000))
+      .accounts({
+        doner: global.user.publicKey,
+        donerTokenAccount: global.signerTokenAddr,
+        treasury: global.treasury,
+        treasuryTokenAccount: global.treasuryTokenAccount,
+        usdcMint: global.usdcMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([global.user])
+      .rpc(rpcConfig);
+  });
+  it("Start distribution", async () => {
+    let cranker = await create_keypair();
+    let epoch = await get_pda_from_seeds([
+      Buffer.from("1"),
+      Buffer.from("di_epoch"),
+    ]);
+
+    await program.methods
+      .startDistributionEpoch()
+      .accounts({
+        cranker: cranker.publicKey,
+        treasury: global.treasury,
+        treasuryTokenAccount: global.treasuryTokenAccount,
+        usdcMint: global.usdcMint,
+        epoch: epoch,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([cranker])
+      .rpc(rpcConfig);
+    global.epoch = epoch;
+  });
+  it("Request ubi randomness", async () => {
+    // Generate a new force (seed) for randomness
+    const force = anchor.web3.Keypair.generate().publicKey.toBuffer();
+    // Calculate the randomness account address
+    const randomnessAccount = randomnessAccountAddress(force);
+
+    // Get the VRF treasury account
+    const vrfConfig = networkStateAccountAddress();
+
+    let ubi_randomness_acc = await get_pda_from_seeds([
+      global.epoch.toBuffer(),
+      force,
+      Buffer.from("ubi_randomness_acc"),
+    ]);
+
+    let cranker = await create_keypair();
+    await program.methods
+      .requestUbiRandomness(Array.from(force))
+      .accounts({
+        cranker: cranker.publicKey,
+        treasury: global.treasury,
+        epoch: global.epoch,
+        ubiRandomnessAcc: ubi_randomness_acc,
+        randomnessAccount: randomnessAccount,
+        vrfConfig: vrfConfig,
+        vrfProgram: vrf.programId,
+        vrfTreasury: vrfTreasury.publicKey,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .signers([cranker])
+      .rpc(rpcConfig);
+    await emulateFulfill(force);
+    global.ubiRandomnessAcc = ubi_randomness_acc;
+    global.ubi_randomness_acc_vrf = randomnessAccount;
+  });
+  it("Reveal ubi randomness", async () => {
+    let cranker = await create_keypair();
+    await program.methods
+      .revealUbiRandomness()
+      .accounts({
+        cranker: cranker.publicKey,
+        randomnessAccountData: global.ubi_randomness_acc_vrf,
+        treasury: global.treasury,
+        epoch: global.epoch,
+        ubiRandomnessAcc: global.ubiRandomnessAcc,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .signers([cranker])
+      .rpc(rpcConfig);
+  });
+  it("Claim ubi", async () => {
+    let claim_hashmap = await get_pda_from_seeds([
+      global.user.publicKey.toBuffer(),
+      global.epoch.toBuffer(),
+      Buffer.from("claim_hashmap"),
+    ]);
+    await program.methods
+      .claimUbi()
+      .accounts({
+        claimer: global.user.publicKey,
+        claimerMemberAcc: global.initialMember,
+        claimerTokenAccount: global.signerTokenAddr,
+        treasury: global.treasury,
+        claimHashmap: claim_hashmap,
+        treasuryTokenAccount: global.treasuryTokenAccount,
+        epoch: global.epoch,
+        ubiRandomnessAcc: global.ubiRandomnessAcc,
+        usdcMint: global.usdcMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([global.user])
+      .rpc(rpcConfig);
+
+    let new_claim_hashmap = await get_pda_from_seeds([
+      global.memberCreator.publicKey.toBuffer(),
+      global.epoch.toBuffer(),
+      Buffer.from("claim_hashmap"),
+    ]);
+    await program.methods
+      .claimUbi()
+      .accounts({
+        claimer: global.memberCreator.publicKey,
+        claimerMemberAcc: global.member,
+        claimerTokenAccount: global.memberTokenAccount,
+        treasury: global.treasury,
+        claimHashmap: new_claim_hashmap,
+        treasuryTokenAccount: global.treasuryTokenAccount,
+        epoch: global.epoch,
+        ubiRandomnessAcc: global.ubiRandomnessAcc,
+        usdcMint: global.usdcMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([global.memberCreator])
       .rpc(rpcConfig);
   });
 });

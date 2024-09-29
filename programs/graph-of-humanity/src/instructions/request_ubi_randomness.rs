@@ -23,7 +23,7 @@ pub struct RequestRandomnessUBI<'info> {
     #[account(
         mut,
         seeds = [
-            &treasury.distributions.to_le_bytes(),
+            treasury.distributions.to_string().as_bytes(),
             b"di_epoch",
         ],
         bump=epoch.bump

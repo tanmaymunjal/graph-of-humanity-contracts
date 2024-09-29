@@ -68,7 +68,7 @@ pub fn handler(ctx: Context<InitializeContract>, initialize_message: String) -> 
 
     treasury.bump = ctx.bumps.treasury;
     treasury.num_of_citizens = 1;
-    treasury.distributions = 0;
+    treasury.distributions = 1;
     treasury.distribution_active = false;
 
     member.bump = ctx.bumps.member;

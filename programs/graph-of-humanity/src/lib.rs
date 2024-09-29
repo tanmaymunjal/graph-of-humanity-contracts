@@ -73,6 +73,10 @@ pub mod graph_of_humanity {
         claim_reward::handler(ctx)
     }
 
+    pub fn claim_ubi(ctx: Context<ClaimUBI>) -> Result<()> {
+        claim_ubi::handler(ctx)
+    }
+
     pub fn start_distribution_epoch(ctx: Context<StartDistribution>) -> Result<()> {
         start_distribution_epoch::handler(ctx)
     }
