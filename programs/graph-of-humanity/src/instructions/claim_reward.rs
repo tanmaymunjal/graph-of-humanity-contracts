@@ -31,7 +31,7 @@ pub struct ClaimVoteReward<'info> {
     #[account(
         constraint = member_citizenship_appl.judges.contains(&voter_member.citizen_index.unwrap()) @ GraphOfHumanityErrors::VoterNotInJudges,
         constraint = member_citizenship_appl.voting_started.is_some() @ GraphOfHumanityErrors::VotingNotStarted,
-        constraint = Clock::get()?.unix_timestamp - member_citizenship_appl.voting_started.unwrap() > 5 @ GraphOfHumanityErrors::VotingStillOngoing
+        constraint = Clock::get()?.unix_timestamp - member_citizenship_appl.voting_started.unwrap() > DAY @ GraphOfHumanityErrors::VotingStillOngoing
     )]
     pub member_citizenship_appl: Account<'info, CitizenshipApplication>,
     #[account(
