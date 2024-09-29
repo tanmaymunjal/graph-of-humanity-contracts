@@ -38,7 +38,7 @@ pub struct StartDistribution<'info> {
     )]
     pub treasury_token_account: InterfaceAccount<'info, TokenAccount>,
     // #[account(address=USDC)]
-    pub usdc_mint:  InterfaceAccount<'info, Mint>,
+    pub usdc_mint: InterfaceAccount<'info, Mint>,
     pub system_program: Program<'info, System>,
     pub token_program: Interface<'info, TokenInterface>,
     pub associated_token_program: Program<'info, AssociatedToken>,
