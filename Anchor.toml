@@ -5,13 +5,13 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-graph_of_humanity = "7gXMj3ZzaaLdoXp1L1q3VvxgFfsRxcCBWk8WiL3xXW6o"
+graph_of_humanity = "V1LBHd1KmGxHHAFKhyC5msy1ALXfS8LgDUo12cXufeZ"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "Devnet"
 wallet = "/home/tanmay-munjal/.config/solana/id.json"
 
 [scripts]
