@@ -183,7 +183,7 @@ describe("graph-of-humanity", () => {
 
   it("Edit bio", async () => {
     await program.methods
-      .editBio("life imprisonment")
+      .editUser("life imprisonment", "Super Mario")
       .accounts({
         memberCreator: global.memberCreator.publicKey,
         member: global.member,

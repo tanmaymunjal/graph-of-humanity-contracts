@@ -14,9 +14,10 @@ pub struct UsernameEdited {
 }
 
 #[event]
-pub struct BioEdited {
+pub struct UserEdited {
     pub member: Pubkey,
     pub new_bio_link: String,
+    pub new_username: String,
 }
 
 #[event]

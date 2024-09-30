@@ -25,8 +25,12 @@ pub mod graph_of_humanity {
         become_member::handler(ctx, citizen_name, bio_link)
     }
 
-    pub fn edit_bio(ctx: Context<EditBio>, new_bio_link: String) -> Result<()> {
-        edit_bio::handler(ctx, new_bio_link)
+    pub fn edit_user(
+        ctx: Context<EditUser>,
+        new_bio_link: String,
+        new_username: String,
+    ) -> Result<()> {
+        edit_user::handler(ctx, new_bio_link, new_username)
     }
 
     pub fn apply_citizenship(
