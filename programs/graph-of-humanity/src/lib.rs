@@ -57,7 +57,7 @@ pub mod graph_of_humanity {
         request_randomness_voters::handler(ctx, force)
     }
 
-    pub fn reveal_randomness_voters(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
+    pub fn reveal_randomness_voters(ctx: Context<RevealRandomnessJudges>) -> Result<(Vec<u64>)> {
         reveal_randomness_voters::handler(ctx)
     }
 

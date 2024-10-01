@@ -2,7 +2,8 @@ import * as anchor from "@coral-xyz/anchor";
 import { Program, BN } from "@coral-xyz/anchor";
 import { GraphOfHumanity } from "../target/types/graph_of_humanity";
 import { rpcConfig } from "./test_config";
-import { create_keypair, get_pda_from_seeds, sleep } from "./utils";
+import { create_keypair, get_pda_from_seeds, sleep, getReturnLog } from "./utils";
+import * as borsh from "borsh";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress,
@@ -20,6 +21,7 @@ import {
 } from "@orao-network/solana-vrf";
 import nacl from "tweetnacl";
 import { LAMPORTS_PER_SOL, Keypair } from "@solana/web3.js";
+import assert from "assert";
 
 describe("graph-of-humanity", () => {
   // Configure the client to use the local cluster.
@@ -283,8 +285,8 @@ describe("graph-of-humanity", () => {
 
   it("Reveal random judges", async () => {
     let cranker = await create_keypair();
-    await emulateFulfill(global.force),
-      await program.methods
+    await emulateFulfill(global.force);
+    let res = await program.methods
         .revealRandomnessVoters()
         .accounts({
           cranker: cranker.publicKey,
@@ -295,7 +297,16 @@ describe("graph-of-humanity", () => {
         })
         .signers([cranker])
         .rpc(rpcConfig);
-  });
+        let t = await connection.getTransaction(res, {
+          commitment: "confirmed",
+        });
+    
+        const [key, data, buffer] = getReturnLog(t);
+        assert.equal(key, program.programId);
+    
+        const reader = new borsh.BinaryReader(buffer);
+        const array = reader.readArray(() => reader.readU8());
+      });
   it("Vote for user", async () => {
     let voteAcc = await get_pda_from_seeds([
       Buffer.from("vote"),

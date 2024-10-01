@@ -29,7 +29,7 @@ pub struct RevealRandomnessJudges<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
+pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<(Vec<u64>)> {
     let randomness_account = &ctx.accounts.randomness_account_data;
     let citizenship_appl = &mut ctx.accounts.citizenship_appl;
     let treasury = &ctx.accounts.treasury;
@@ -105,5 +105,5 @@ pub fn handler(ctx: Context<RevealRandomnessJudges>) -> Result<()> {
         choosen_judges: citizenship_appl.judges.clone()
     });
 
-    Ok(())
+    Ok((citizenship_appl.judges.clone()))
 }

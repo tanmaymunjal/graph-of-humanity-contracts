@@ -35,4 +35,15 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export { create_keypair, get_pda_from_seeds, sleep };
+const getReturnLog = (confirmedTransaction) => {
+  const prefix = "Program return: ";
+  let log = confirmedTransaction.meta.logMessages.find((log) =>
+    log.startsWith(prefix)
+  );
+  log = log.slice(prefix.length);
+  const [key, data] = log.split(" ", 2);
+  const buffer = Buffer.from(data, "base64");
+  return [key, data, buffer];
+};
+
+export { create_keypair, get_pda_from_seeds, sleep, getReturnLog };
