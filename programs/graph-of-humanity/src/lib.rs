@@ -7,7 +7,7 @@ pub mod state;
 pub mod utils;
 
 use instructions::*;
-declare_id!("V1LBHd1KmGxHHAFKhyC5msy1ALXfS8LgDUo12cXufeZ");
+declare_id!("sqy5Z44qPEs9jtSy5RKY8v7xNJcdZgXTvy9m6hgGjry");
 
 #[program]
 pub mod graph_of_humanity {
