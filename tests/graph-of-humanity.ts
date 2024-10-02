@@ -268,7 +268,6 @@ describe("graph-of-humanity", () => {
       .requestRandomnessVoters(Array.from(force))
       .accounts({
         cranker: global.user.publicKey,
-        crankerMember: global.initialMember,
         citizenshipAppl: global.citizenshipAppl,
         randomnessAccount: randomnessAccount,
         treasury: global.treasury,

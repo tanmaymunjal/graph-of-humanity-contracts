@@ -14,15 +14,6 @@ pub struct RequestRandomnessJudges<'info> {
     #[account(mut)]
     pub cranker: Signer<'info>,
     #[account(
-        seeds = [
-            cranker.key().as_ref(),
-            b"member"
-        ],
-        bump=cranker_member.bump,
-        constraint = cranker_member.citizen == true @GraphOfHumanityErrors::CanNotUseCrankAsANonCitizen
-    )]
-    pub cranker_member: Account<'info, Member>,
-    #[account(
         mut,
         constraint = citizenship_appl.fee_paid == true && citizenship_appl.voucher_fee_paid == true @GraphOfHumanityErrors::CanNotAssignJudgesBeforeFeePaid,
         constraint = citizenship_appl.judges.len() as u64 != NUM_OF_JUDGES || citizenship_appl.judges.len() as u64 != treasury.num_of_citizens @GraphOfHumanityErrors::CitizenApplJudgesAlreadyAssigned,
